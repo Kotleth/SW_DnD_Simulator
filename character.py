@@ -57,25 +57,28 @@ class Unit:
 
     def get_damage(self, hit_chance, damage_instance: DamageInstance, attack_type):
         if attack_type.lower() == "ranged":
-            pass  # Placeholder
+            pass  # TODO
 
-        if r.randint(0, 20) + hit_chance >= self.armor_class:
+        attack_roll = r.randint(0, 20)
+        if attack_roll + hit_chance >= self.armor_class:
             for damage_type, damage in damage_instance.damage_dict.items():
                 if damage_type in self.resistances:
                     self.vitality_points -= ceil(damage/2)
                 else:
                     self.vitality_points -= damage
+            print(f"Rolled {attack_roll} and hit!")
+        else:
+            print(f"Rolled {attack_roll} and missed!")
 
     def deal_melee_damage(self, target: Type['Unit'], weapon: Weapon = None):
         if weapon is None:
             weapon = self.weapon
-        print(weapon)
         hit_chance = self.strength.get_bonus() + self.proficiency
-        damage = weapon.damage
+        damage = weapon.damage + self.strength.get_bonus()
         for dice_number in range(weapon.number_of_dice):
             damage += r.randint(1, weapon.die_max_value)
         damage_instance = DamageInstance({weapon.damage_type: damage})
-        target.get_damage(target, hit_chance, damage_instance, "melee")
+        target.get_damage(hit_chance=hit_chance, damage_instance=damage_instance, attack_type="melee")
 
 
 
