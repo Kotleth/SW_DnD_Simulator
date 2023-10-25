@@ -35,10 +35,34 @@ class DamageInstance:
 class Attribute:
     name: str
     value: int
-    bonus: int
 
     def __init__(self, name, value):
         self.name = name
         self.value = value
-        self.bonus = floor((value - 10)/2)
 
+    def get_bonus(self):
+        return floor((self.value - 10)/2)
+
+
+class CharacterClass:
+    name: str
+    vitality_dice: int
+
+    def __init__(self, name, vitality_dice):
+        self.name = name
+        self.vitality_dice = vitality_dice
+
+    def show_status(self):
+        print(f"{self.name.upper()}\nVitality die: k{self.vitality_dice}")
+
+
+class CharacterClassList:
+    characters_dict: dict[str, CharacterClass] = {}
+    undefined_class = CharacterClass('undefined', 10)
+
+    @classmethod
+    def get_classes_list(cls):
+        print(f"{'*' * 10}\n")
+        for character in cls.characters_dict.values():
+            character.show_status()
+        print(f"{'*' * 10}")
