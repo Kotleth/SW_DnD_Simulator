@@ -6,12 +6,12 @@ from typing import Type
 
 class Unit:
     name: str
-    strength: int
-    dexterity: int
-    constitution: int
-    intelligence: int
-    wisdom: int
-    charisma: int
+    strength: Attribute
+    dexterity: Attribute
+    constitution: Attribute
+    intelligence: Attribute
+    wisdom: Attribute
+    charisma: Attribute
     armor_class: int
     vitality_points: int
     proficiency: int
@@ -21,12 +21,12 @@ class Unit:
     def __init__(self, name, strength, dexterity, constitution, intelligence, wisdom, charisma, armor_class,
                  vitality_points, proficiency):
         self.name = name
-        self.strength = strength
-        self.dexterity = dexterity
-        self.constitution = constitution
-        self.intelligence = intelligence
-        self.wisdom = wisdom
-        self.charisma = charisma
+        self.strength = Attribute("strength", strength)
+        self.dexterity = Attribute("dexterity", dexterity)
+        self.constitution = Attribute("constitution", constitution)
+        self.intelligence = Attribute("intelligence", intelligence)
+        self.wisdom = Attribute("wisdom", wisdom)
+        self.charisma = Attribute("charisma", charisma)
         self.armor_class = armor_class
         self.vitality_points = vitality_points
         self.proficiency = proficiency
@@ -46,8 +46,11 @@ class Unit:
             print(_resistance)
         print(f"\n{'*'*10}")
 
-    def get_damage(self, hit_bonus, damage_instance: DamageInstance, attack_type):
-        if r.randint(0, 20) + hit_bonus >= self.armor_class:
+    def get_damage(self, hit_chance, damage_instance: DamageInstance, attack_type):
+        if attack_type.lower() == "ranged":
+            pass  # Placeholder
+
+        if r.randint(0, 20) + hit_chance >= self.armor_class:
             for damage_type, damage in damage_instance.damage_dict.items():
                 if damage_type in self.resistances:
                     self.vitality_points -= round(damage/2)
@@ -58,6 +61,8 @@ class Unit:
         if weapon is None:
             weapon = self.weapon
         print(weapon)
+        hit_chance = self.strength.bonus
         damage = DamageInstance()
+        target.get_damage(hit_chance)
 
 

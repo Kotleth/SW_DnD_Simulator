@@ -1,3 +1,5 @@
+from math import floor
+
 
 damage_types = [
                 "Acid",
@@ -28,4 +30,15 @@ class DamageInstance:
         for damage in self.damage_dict.values():
             damage_dealt += damage
         return damage_dealt
+
+
+class Attribute:
+    name: str
+    value: int
+    bonus: int
+
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+        self.bonus = floor((value - 10)/2)
 
