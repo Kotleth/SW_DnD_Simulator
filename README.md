@@ -1,1 +1,0 @@
-# SW_DnD_simulator
