@@ -67,6 +67,11 @@ class Weapon:
 
 
 class WeaponList:
+    """
+    It may be unnecessary to use __new__ and have everything as a class method,
+    as some people may want to create different lists.
+    However, I'm not sure why anyone would want to do that. For now, it stays like this.
+    """
     weapon_dict: dict[str, Weapon] = {}
     unarmed = Weapon(name='unarmed', number_of_dice=0, die_max_value=0, damage=1, damage_type='bludgeoning',
                      weapon_range=1, add_to_list=False)
