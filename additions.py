@@ -1,4 +1,8 @@
 from math import floor
+from os import path
+
+
+this_dir = path.dirname(path.abspath(__file__))
 
 weapons_ranges_associations_dict = {
                 'melee': ['melee', 'close', 'saber', 'sword', 'blade', 'baton', 'knife', 'spear'],

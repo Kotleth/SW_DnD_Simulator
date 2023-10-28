@@ -1,6 +1,8 @@
 import generic_actions
 from weaponry import *
 from generic_actions import *
+import pandas as pd
+from content_builder import *
 
 
 def build_basics():
@@ -9,11 +11,14 @@ def build_basics():
 
 if __name__ == '__main__':
     build_basics()
+    df = pd.read_csv(weapon_list_dir, sep=';')
+    print(df)
+    print(df.columns)
     aragorn = Unit(name='Aragorn', strength=16, dexterity=16,
                    constitution=14, intelligence=14,
                    wisdom=15, charisma=14,
                    level=12, character_class=CharacterClassList.undefined_class)
-    legolas = Unit(name='legolas', strength=12, dexterity=19,
+    legolas = Unit(name='Legolas', strength=12, dexterity=19,
                    constitution=12, intelligence=14,
                    wisdom=16, charisma=12,
                    level=12, character_class=CharacterClassList.undefined_class)

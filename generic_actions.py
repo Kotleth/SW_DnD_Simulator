@@ -1,5 +1,7 @@
 from character import Unit
 from additions import ColorText
+from weaponry import WeaponList, Weapon
+from typing import Type
 
 
 def perform_attack(attack_result: Unit.melee_attack):
