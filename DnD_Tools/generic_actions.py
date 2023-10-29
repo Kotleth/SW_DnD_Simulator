@@ -11,6 +11,7 @@ def perform_attack(attack_result: Unit.melee_attack):
     damage_dealt: int = attack_result[1]
     damage_dice_result_list: list[int] = attack_result[2]
     participants: tuple[str] = attack_result[3]
+    crit_occurence: bool = attack_result[4]
     if damage_dealt == 0:
         print(f"\n{participants[0].title()} rolled {attack_roll} and missed!"
               f"\n{participants[1].title()} is unscathed!")
@@ -24,7 +25,7 @@ def perform_attack(attack_result: Unit.melee_attack):
             damage_rolls_str += f"{damage_dice_result_list[-2]} and {damage_dice_result_list[-1]}"
         else:
             raise Exception("No damage rolls has been made!")
-        print(f"{participants[0].title()} rolled {ColorText.green if attack_roll == 20 else ''}{attack_roll}{ColorText.end if attack_roll == 20 else ''} and hit!"
-              f"\n{participants[0].title()} rolled for damage", damage_rolls_str,
-              f"dealing {participants[1].title()} {ColorText.red if damage_dealt >= 10 else ''}"
-              f"{damage_dealt}{ColorText.end if damage_dealt >= 10 else ''} damage!")
+        print(f"{participants[0].title()} rolled {ColorText.green if crit_occurence else ''}{attack_roll}{ColorText.end + 'and landed a critical hit!' if crit_occurence else ' and hit!'}"
+              f"\n{participants[0].title()} rolled", damage_rolls_str,
+              f"for damage. \n{participants[1].title()} has lost {ColorText.red if damage_dealt >= 10 else ''}"
+              f"{damage_dealt}{ColorText.end if damage_dealt >= 10 else ''} vitality points!")

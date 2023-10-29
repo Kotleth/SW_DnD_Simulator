@@ -5,7 +5,7 @@ from csv import writer
 class Weapon:
     name: str
     number_of_dice: int
-    damage: int
+    static_damage: int
     crit_chance: int
     multiplier_crit: int
     die_max_value: int
@@ -19,7 +19,7 @@ class Weapon:
     initializer = False
 
     def __init__(self, name, damage_type, weapon_type='Unknown', weapon_range=None, die_max_value=1, number_of_dice=0,
-                 damage=0, crit_chance=1,
+                 static_damage=0, crit_chance=1,
                  multiplier_crit=2, add_to_list=True, price=0, traits=None):
         if weapon_range is None:
             weapon_range = 1
@@ -27,7 +27,7 @@ class Weapon:
             self.traits = ['None']
         self.name = name
         self.number_of_dice = number_of_dice
-        self.damage = damage
+        self.static_damage = static_damage
         self.crit_chance = crit_chance
         self.multiplier_crit = multiplier_crit
         self.die_max_value = die_max_value
@@ -57,7 +57,7 @@ class Weapon:
 
     def show_status(self):
         print(
-            f"\n{ColorText.green}{self.name.upper()}{ColorText.end}\nDamage: {str(self.damage) + ' + ' if self.damage > 0 else ''}"
+            f"\n{ColorText.green}{self.name.upper()}{ColorText.end}\nDamage: {str(self.static_damage) + ' + ' if self.static_damage > 0 else ''}"
             f"{f'{self.number_of_dice}k{self.die_max_value}' if self.number_of_dice * self.die_max_value != 0 else ''}"
             f"\nDamage type: {self.damage_type.title()}",
             f"\nTraits:", *[trait for trait in self.traits],
@@ -73,7 +73,7 @@ class WeaponList:
     However, I'm not sure why anyone would want to do that. For now, it stays like this.
     """
     weapon_dict: dict[str, Weapon] = {}
-    unarmed = Weapon(name='unarmed', number_of_dice=0, die_max_value=0, damage=1, damage_type='bludgeoning',
+    unarmed = Weapon(name='unarmed', number_of_dice=0, die_max_value=0, static_damage=1, damage_type='bludgeoning',
                      weapon_range=1, add_to_list=False)
 
     _instance = None

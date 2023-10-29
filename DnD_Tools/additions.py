@@ -67,13 +67,13 @@ class CharacterClass:
 
 
 class CharacterClassList:
-    characters_dict: dict[str, CharacterClass] = {}
+    character_classes_dict: dict[str, CharacterClass] = {}
     undefined_class = CharacterClass('undefined', 10)
 
     @classmethod
     def get_classes_list(cls):
         print(f"{'*' * 10}\n")
-        for character in cls.characters_dict.values():
+        for character in cls.character_classes_dict.values():
             character.show_status()
         print(f"{'*' * 10}")
 

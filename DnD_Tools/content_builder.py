@@ -17,10 +17,10 @@ weapon_list = [
 
 def build_weapon_list():
     """ Creates a weapon list """
-    Weapon(name='long sword', number_of_dice=1, die_max_value=10, damage_type='slashing', weapon_range='sword')
-    Weapon(name='short sword', number_of_dice=1, die_max_value=8, damage_type='slashing', weapon_range=1)
-    Weapon(name='blaster', number_of_dice=1, die_max_value=10, damage_type='energy', weapon_range='blaster')
-    Weapon(name='energy crossbow', damage=2, number_of_dice=2, die_max_value=6, damage_type='energy',
+    Weapon(name='long sword', number_of_dice=1, die_max_value=10, crit_chance=19, multiplier_crit=2, damage_type='slashing', weapon_range='sword')
+    Weapon(name='short sword', number_of_dice=1, die_max_value=8, crit_chance=19, multiplier_crit=2, damage_type='slashing', weapon_range=1)
+    Weapon(name='blaster', number_of_dice=1, die_max_value=10, crit_chance=19, multiplier_crit=2, damage_type='energy', weapon_range='blaster')
+    Weapon(name='energy crossbow', static_damage=2, number_of_dice=2, die_max_value=6, crit_chance=19, multiplier_crit=2, damage_type='energy',
            weapon_range='crossbow')
 
 # with open(weapon_list_dir, mode='a') as file:

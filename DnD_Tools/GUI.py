@@ -7,6 +7,7 @@ from PySide6.QtCore import Signal, Slot
 class SideWindow(QDialog):
 
     character_pass = Signal(list)
+
     def __init__(self):
         super().__init__()
 
@@ -20,7 +21,7 @@ class SideWindow(QDialog):
         self.text_inputs = []
         for i in range(9):
             label = QLabel(char_stats[i], self)
-            if i in range(3, 10):
+            if i in range(2, 10):
                 text_input = QComboBox(self)
                 self.text_inputs.append(text_input)
                 layout.addWidget(label)
@@ -31,6 +32,7 @@ class SideWindow(QDialog):
                 else:
                     for j in range(1, 31):
                         text_input.addItem(str(j))
+                    text_input.setCurrentText(str(10))
                 text_input.setFixedWidth(100)  # Set the width to 200 pixels
                 text_input.setFixedHeight(30)
             else:
@@ -49,11 +51,10 @@ class SideWindow(QDialog):
         self.setLayout(layout)
 
     def character_create(self):
-        for i, text_input in enumerate(self.text_inputs):
-            text = text_input.text()
-            print(f"Box {i + 1}: {text}")
+        # for i, text_input in enumerate(self.text_inputs):
+        #     text = text_input.text()
+        #     print(f"Box {i + 1}: {text}")
         self.character_pass.emit([x.text() if type(x) == QLineEdit else x.currentText() for x in self.text_inputs])
-        self.close()
 
 
 class MyMainWindow(QMainWindow):
@@ -84,6 +85,7 @@ class MyMainWindow(QMainWindow):
 
     def receive_character(self, character_description):
         self.data_received = character_description
+
         print("XDD")
         print(self.data_received)
         print("XDD")
