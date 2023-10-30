@@ -4,7 +4,7 @@ from weaponry import WeaponList, Weapon
 from typing import Type
 
 
-def perform_attack(attack_result: Unit.melee_attack):
+def perform_attack(attack_result: Unit.attack):
     # TODO include 1 and 20 as a critical failure and a critical success respectively
     # A math here is fine, you just need to include things like a character's strength bonus.
     attack_roll: int = attack_result[0]

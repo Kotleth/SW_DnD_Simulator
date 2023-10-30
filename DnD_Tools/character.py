@@ -55,8 +55,8 @@ class Unit:
             print(_resistance)
         print(f"\n{'*' * 10}")
 
-    def get_damage(self, damage_instance: DamageInstance, attack_type, hit_value=99):
-        if attack_type.lower() == "ranged":
+    def get_damage(self, damage_instance: DamageInstance, weapon_range, hit_value=99):
+        if weapon_range > 1:
             pass  # TODO
         damage_dealt = 0
         if hit_value >= self.armor_class:
@@ -71,9 +71,10 @@ class Unit:
 
         return damage_dealt
 
-    def melee_attack(self, target: Type['Unit'], weapon: Weapon = None, to_hit_misc_bonus=0):
+    def attack(self, target: Type['Unit'], weapon: Weapon = None, to_hit_misc_bonus=0):
         crit_occurrence = False
-        damage_dice_result_list = []
+        crit_damage_dice_result_list = []
+        damage_dealt = 0
         participants = (self.name, target.name)
         crit_multiplier = 1
         if weapon is None:
@@ -94,36 +95,53 @@ class Unit:
             if attack_roll >= weapon.crit_chance:
                 crit_verification = r.randint(1, 20) + self.strength.get_bonus() + self.proficiency + to_hit_misc_bonus
                 if crit_verification >= target.armor_class:
-                    crit_multiplier = weapon.multiplier_crit
+                    crit_damage_dice_result_list, crit_damage = calc_weapon_damage(weapon.number_of_dice, weapon.die_max_value)
+                    damage_dealt += target.get_damage(hit_value=hit_value,
+                                                      damage_instance=DamageInstance({weapon.damage_type: crit_damage}),
+                                                      weapon_range=weapon.normal_range)
                     crit_occurrence = True
-        for dice_number in range(weapon.number_of_dice * crit_multiplier):
-            roll_result = r.randint(1, weapon.die_max_value)
-            damage_dice_result_list.append(roll_result)
-            damage += roll_result
-        damage_instance = DamageInstance({weapon.damage_type: damage})
+        damage_dice_result_list, damage = calc_weapon_damage(weapon.number_of_dice * crit_multiplier, weapon.die_max_value, damage)
         # pycharm will tell you that parameter self is unfulfilled but don't listen to him, he is lying
-        damage_dealt = target.get_damage(hit_value=hit_value, damage_instance=damage_instance,
-                                                      attack_type="melee")
+        damage_dealt += target.get_damage(hit_value=hit_value, damage_instance=DamageInstance({weapon.damage_type: damage}),
+                                                      weapon_range=weapon.normal_range)
 
-        return attack_roll, damage_dealt, damage_dice_result_list, participants, crit_occurrence
+        return attack_roll, damage_dealt, damage_dice_result_list + crit_damage_dice_result_list, participants, crit_occurrence
 
-    def range_attack(self, target: Type['Unit'], weapon: Weapon = None, to_hit_bonus=0):
-        damage_dice_result_list = []
-        participants = (self.name, target.name)
-        if weapon is None:
-            weapon = self.weapon
-        hit_chance = self.dexterity.get_bonus() + self.proficiency + to_hit_bonus
-        damage = weapon.static_damage
-        for dice_number in range(weapon.number_of_dice):
-            roll_result = r.randint(1, weapon.die_max_value)
-            damage_dice_result_list.append(roll_result)
-            damage += roll_result
-        damage_instance = DamageInstance({weapon.damage_type: damage})
-        # pycharm will tell you that parameter self is unfulfilled but don't listen to him, he is lying
-        attack_roll, damage_dealt = target.get_damage(hit_chance=hit_chance, damage_instance=damage_instance,
-                                                      attack_type="melee")
-
-        return attack_roll, damage_dealt, damage_dice_result_list, participants
+    # def range_attack(self, target: Type['Unit'], weapon: Weapon = None, to_hit_misc_bonus=0):
+    #     crit_occurrence = False
+    #     damage_dice_result_list = []
+    #     participants = (self.name, target.name)
+    #     crit_multiplier = 1
+    #     if weapon is None:
+    #         weapon = self.weapon
+    #     attack_roll = r.randint(1, 20)
+    #     if attack_roll == 1:
+    #         hit_value = 0
+    #         damage = 0
+    #         crit_multiplier = 0
+    #     elif attack_roll == 20:
+    #         hit_value = 99
+    #         damage = weapon.static_damage + self.strength.get_bonus()
+    #         crit_multiplier = weapon.multiplier_crit
+    #         crit_occurrence = True
+    #     else:
+    #         hit_value = self.strength.get_bonus() + self.proficiency + to_hit_misc_bonus + attack_roll
+    #         damage = weapon.static_damage + self.strength.get_bonus()
+    #         if attack_roll >= weapon.crit_chance:
+    #             crit_verification = r.randint(1, 20) + self.strength.get_bonus() + self.proficiency + to_hit_misc_bonus
+    #             if crit_verification >= target.armor_class:
+    #                 crit_multiplier = weapon.multiplier_crit
+    #                 crit_occurrence = True
+    #     for dice_number in range(weapon.number_of_dice * crit_multiplier):
+    #         roll_result = r.randint(1, weapon.die_max_value)
+    #         damage_dice_result_list.append(roll_result)
+    #         damage += roll_result
+    #     damage_instance = DamageInstance({weapon.damage_type: damage})
+    #     # pycharm will tell you that parameter self is unfulfilled but don't listen to him, he is lying
+    #     damage_dealt = target.get_damage(hit_value=hit_value, damage_instance=damage_instance,
+    #                                      attack_type="ranged")
+    #
+    #     return attack_roll, damage_dealt, damage_dice_result_list, participants, crit_occurrence
 
 
 class UnitList:

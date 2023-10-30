@@ -1,10 +1,11 @@
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLineEdit, \
-    QPushButton, QDialog, QLabel, QComboBox
-from PySide6.QtCore import Signal, Slot
+    QPushButton, QDialog, QLabel, QComboBox, QCompleter
+from PySide6.QtCore import Signal, Slot, Qt
+from additions import CharacterClassList
 
 
-class SideWindow(QDialog):
+class CharacterWindow(QDialog):
 
     character_pass = Signal(list)
 
@@ -33,17 +34,20 @@ class SideWindow(QDialog):
                     for j in range(1, 31):
                         text_input.addItem(str(j))
                     text_input.setCurrentText(str(10))
-                text_input.setFixedWidth(100)  # Set the width to 200 pixels
+                text_input.setFixedWidth(100)
                 text_input.setFixedHeight(30)
             else:
                 text_input = QLineEdit(self)
+                if i == 1:
+                    class_completer = QCompleter(CharacterClassList.character_classes_dict.keys())
+                    class_completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+                    text_input.setCompleter(class_completer)
                 self.text_inputs.append(text_input)
                 layout.addWidget(label)
                 layout.addWidget(text_input)
-                text_input.setFixedWidth(200)  # Set the width to 200 pixels
+                text_input.setFixedWidth(200)
                 text_input.setFixedHeight(30)
 
-        # Create a push button
         button = QPushButton("Create", self)
         button.clicked.connect(self.character_create)
         layout.addWidget(button)
@@ -51,10 +55,10 @@ class SideWindow(QDialog):
         self.setLayout(layout)
 
     def character_create(self):
-        # for i, text_input in enumerate(self.text_inputs):
-        #     text = text_input.text()
-        #     print(f"Box {i + 1}: {text}")
-        self.character_pass.emit([x.text() if type(x) == QLineEdit else x.currentText() for x in self.text_inputs])
+        if self.text_inputs[1].text().lower() in CharacterClassList.character_classes_dict.keys():
+            self.character_pass.emit([x.text() if type(x) == QLineEdit else x.currentText() for x in self.text_inputs])
+        else:
+            print(f"No such class as {self.text_inputs[1].text().lower().title()}")
 
 
 class MyMainWindow(QMainWindow):
@@ -73,13 +77,13 @@ class MyMainWindow(QMainWindow):
 
         # Create a button to open the side window
         open_button = QPushButton("Open Side Window", self)
-        open_button.clicked.connect(self.open_side_window)
+        open_button.clicked.connect(self.open_character_creation)
         layout.addWidget(open_button)
 
         central_widget.setLayout(layout)
 
-    def open_side_window(self):
-        self.side_window = SideWindow()
+    def open_character_creation(self):
+        self.side_window = CharacterWindow()
         self.side_window.character_pass.connect(self.receive_character)
         self.side_window.show()
 

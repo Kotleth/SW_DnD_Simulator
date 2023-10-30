@@ -8,6 +8,7 @@ from DnD_Tools.GUI import *
 
 def build_basics():
     build_weapon_list()
+    build_classes_list()
 
 
 if __name__ == '__main__':
@@ -24,7 +25,7 @@ if __name__ == '__main__':
                    wisdom=16, charisma=12,
                    level=12, character_class=CharacterClassList.undefined_class)
     print(aragorn.vitality_points)
-    generic_actions.perform_attack(legolas.melee_attack(aragorn, weapon=WeaponList.weapon_dict['short sword']))
+    generic_actions.perform_attack(legolas.attack(aragorn, weapon=WeaponList.weapon_dict['short sword']))
     print(aragorn.vitality_points)
     WeaponList.weapon_dict['blaster'].show_status()
 

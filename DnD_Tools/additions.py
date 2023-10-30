@@ -1,6 +1,6 @@
 from math import floor
 from os import path
-
+import random as r
 
 this_dir = path.dirname(path.abspath(__file__))
 
@@ -58,9 +58,19 @@ class CharacterClass:
     name: str
     vitality_dice: int
 
-    def __init__(self, name, vitality_dice):
-        self.name = name
+    initializer = False
+
+    def __init__(self, name: str, vitality_dice: int, add_to_list=True):
+        self.name = name.lower()
         self.vitality_dice = vitality_dice
+
+        if self.initializer:
+            if name in CharacterClassList.character_classes_dict.keys():
+                raise Exception(f"'{name.title()}'There is already a weapon with that name!")
+        else:
+            CharacterClass.initializer = True
+        if add_to_list:
+            CharacterClassList.character_classes_dict[self.name] = self
 
     def show_status(self):
         print(f"{self.name.upper()}\nVitality die: k{self.vitality_dice}")
@@ -68,7 +78,14 @@ class CharacterClass:
 
 class CharacterClassList:
     character_classes_dict: dict[str, CharacterClass] = {}
-    undefined_class = CharacterClass('undefined', 10)
+    undefined_class = CharacterClass('undefined', 10, add_to_list=False)
+
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(CharacterClassList, cls).__new__(cls)
+        return cls._instance
 
     @classmethod
     def get_classes_list(cls):
@@ -129,6 +146,15 @@ class ColorText:
     end = '\033[0m'
     bold = '\033[1m'
     underline = '\033[4m'
+
+
+def calc_weapon_damage(number_of_dice, die_max_value, damage=0):
+    damage_dice_result_list = []
+    for dice_number in range(number_of_dice):
+        roll_result = r.randint(1, die_max_value)
+        damage_dice_result_list.append(roll_result)
+        damage += roll_result
+    return damage_dice_result_list, damage
 
 
 
