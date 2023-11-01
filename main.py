@@ -24,13 +24,18 @@ if __name__ == '__main__':
                    constitution=12, intelligence=14,
                    wisdom=16, charisma=12,
                    level=12, character_class=CharacterClassList.undefined_class)
-    print(aragorn.vitality_points)
     generic_actions.perform_attack(legolas.attack(aragorn, weapon=WeaponList.weapon_dict['short sword']))
-    print(aragorn.vitality_points)
-    WeaponList.weapon_dict['blaster'].show_status()
+    aragorn.put_on_weapon(WeaponList.weapon_dict['blaster'])
+    legolas.put_on_weapon(WeaponList.weapon_dict['blaster'])
+    duel_result = 0
+    for i in range(100):  # TODO make it a function
+        duel_result += generic_actions.start_duel(aragorn, legolas, 99, True)
+        aragorn.long_rest()
+        legolas.long_rest()
+    print(duel_result)
 
-    app = QApplication(sys.argv)
-    window = MyMainWindow()
-    window.show()
-    sys.exit(app.exec())
+    # app = QApplication(sys.argv)
+    # window = MyMainWindow()
+    # window.show()
+    # sys.exit(app.exec())
 

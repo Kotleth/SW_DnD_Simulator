@@ -4,6 +4,26 @@ from weaponry import WeaponList, Weapon
 from typing import Type
 
 
+def start_duel(duelist_1: Unit, duelist_2: Unit, max_rounds: int, show_fight_description=False):
+    current_round = 0
+    attack_order: [Unit] = sorted([duelist_1, duelist_2], key=lambda x: x.get_initiative_roll())
+    while (max_rounds > current_round and
+           duelist_1.current_vitality_points > 0 and
+           duelist_2.current_vitality_points > 0):
+        if show_fight_description:
+            perform_attack(attack_order[0].attack(attack_order[1]))
+            perform_attack(attack_order[1].attack(attack_order[0]))
+            print(duelist_1.current_vitality_points, duelist_1.name)
+            print(duelist_2.current_vitality_points, duelist_2.name)
+        else:
+            attack_order[0].attack(attack_order[1])
+            attack_order[1].attack(attack_order[0])
+    print(duelist_1.current_vitality_points, duelist_1.name)
+    print(duelist_2.current_vitality_points, duelist_2.name)
+
+    return 1 if duelist_1.current_vitality_points > duelist_2.current_vitality_points else -1
+
+
 def perform_attack(attack_result: Unit.attack):
     # TODO include 1 and 20 as a critical failure and a critical success respectively
     # A math here is fine, you just need to include things like a character's strength bonus.
@@ -25,7 +45,7 @@ def perform_attack(attack_result: Unit.attack):
             damage_rolls_str += f"{damage_dice_result_list[-2]} and {damage_dice_result_list[-1]}"
         else:
             raise Exception("No damage rolls has been made!")
-        print(f"{participants[0].title()} rolled {ColorText.green if crit_occurence else ''}{attack_roll}{ColorText.end + 'and landed a critical hit!' if crit_occurence else ' and hit!'}"
+        print(f"\n{participants[0].title()} rolled {ColorText.green if crit_occurence else ''}{attack_roll}{ColorText.end + 'and landed a critical hit!' if crit_occurence else ' and hit!'}"
               f"\n{participants[0].title()} rolled", damage_rolls_str,
               f"for damage. \n{participants[1].title()} has lost {ColorText.red if damage_dealt >= 10 else ''}"
-              f"{damage_dealt}{ColorText.end if damage_dealt >= 10 else ''} vitality points!")
+              f"{damage_dealt}{ColorText.end if damage_dealt >= 10 else ''} vitality points!\n")

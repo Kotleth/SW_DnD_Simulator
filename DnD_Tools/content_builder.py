@@ -13,11 +13,14 @@ weapon_list = [
     ['blaster', '1k10', 'energy', 'light', '2x', '19-20', '60|120', 'blaster', '200'],
     ['lightsaber', '2k6', 'energy', 'light, finesse', '2x', '19-20', 'melee', 'lightsaber', '800'],
 ]
+
+
 def build_classes_list():
     """ Creates a weapon list """
     CharacterClass(name='soldier', vitality_dice=12)
     CharacterClass(name='jedi knight', vitality_dice=10)
     CharacterClass(name='scoundrel', vitality_dice=8)
+
 
 def build_weapon_list():
     """ Creates a weapon list """
