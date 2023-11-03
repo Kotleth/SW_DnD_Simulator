@@ -4,6 +4,19 @@ from weaponry import WeaponList, Weapon
 from typing import Type
 
 
+def duel_series(duelist_1: Unit, duelist_2: Unit, duels_number=100, max_rounds=100, show_fight_description=False):
+    duel_result = 0
+    for i in range(duels_number):  # TODO make it a function
+        duel_result += start_duel(duelist_1, duelist_2, max_rounds, show_fight_description)
+        duelist_1.long_rest()
+        duelist_2.long_rest()
+    print(duel_result)
+    if duel_result == 0:
+        print("A series of duels ended in a draw!")
+    else:
+        print(f"{duelist_1.name.title() if duel_result > 0 else duelist_2.name.title()} has won by {abs(duel_result)} duels!")
+
+
 def start_duel(duelist_1: Unit, duelist_2: Unit, max_rounds: int, show_fight_description=False):
     current_round = 0
     attack_order: [Unit] = sorted([duelist_1, duelist_2], key=lambda x: x.get_initiative_roll())

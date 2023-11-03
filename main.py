@@ -3,7 +3,7 @@ import pandas as pd
 from DnD_Tools import generic_actions
 from DnD_Tools.content_builder import *
 from DnD_Tools.character import Unit
-from DnD_Tools.GUI import *
+from DnD_Tools.GUI import open_app
 
 
 def build_basics():
@@ -27,15 +27,5 @@ if __name__ == '__main__':
     generic_actions.perform_attack(legolas.attack(aragorn, weapon=WeaponList.weapon_dict['short sword']))
     aragorn.put_on_weapon(WeaponList.weapon_dict['blaster'])
     legolas.put_on_weapon(WeaponList.weapon_dict['blaster'])
-    duel_result = 0
-    for i in range(100):  # TODO make it a function
-        duel_result += generic_actions.start_duel(aragorn, legolas, 99, True)
-        aragorn.long_rest()
-        legolas.long_rest()
-    print(duel_result)
-
-    # app = QApplication(sys.argv)
-    # window = MyMainWindow()
-    # window.show()
-    # sys.exit(app.exec())
-
+    generic_actions.duel_series(aragorn, legolas, show_fight_description=True)
+    open_app()

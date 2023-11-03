@@ -9,7 +9,7 @@ class SideWindow(QDialog):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Side Window")
+        self.setWindowTitle("Battle simulator")
         self.setGeometry(900, 100, 300, 400)
 
         layout = QVBoxLayout()
@@ -96,6 +96,7 @@ class CharacterWindow(QDialog):
         if self.text_inputs[1].text().lower() in CharacterClassList.character_classes_dict.keys():
             self.character_pass.emit([x.text() if type(x) == QLineEdit else x.currentText() for x in self.text_inputs])
         else:
+            window.action_browser.append(f"No such class as {self.text_inputs[1].text().lower().title()}")
             print(f"No such class as {self.text_inputs[1].text().lower().title()}")
 
 
@@ -103,9 +104,10 @@ class MyMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.data_received = []
-        self.side_window = None
+        self.char_creation_window = None
+        self.battle_window = None
 
-        self.setWindowTitle("Main Window")
+        self.setWindowTitle("D&D Simulator")
         self.setGeometry(100, 100, 400, 300)
 
         central_widget = QWidget()
@@ -114,29 +116,28 @@ class MyMainWindow(QMainWindow):
         layout = QVBoxLayout()
 
         # Create a button to open the side window
-        open_button = QPushButton("Open Side Window", self)
+        open_button = QPushButton("Open Character Creation", self)
         open_button.clicked.connect(self.open_character_creation)
         layout.addWidget(open_button)
-
         self.action_browser = QTextBrowser(self)
         layout.addWidget(self.action_browser)
 
-        self.log_button = QPushButton("Log Action", self)
+        self.log_button = QPushButton("Open Battle Simulator", self)
         self.log_button.clicked.connect(self.log_action)
         layout.addWidget(self.log_button)
 
         central_widget.setLayout(layout)
-        side_window = SideWindow()
-        side_window.exec()
 
     def open_character_creation(self):
         self.action_browser.append("Opened character creation")
-        self.side_window = CharacterWindow()
-        self.side_window.character_pass.connect(self.receive_character)
-        self.side_window.show()
+        self.char_creation_window = CharacterWindow()
+        self.char_creation_window.character_pass.connect(self.receive_character)
+        self.char_creation_window.show()
 
     def log_action(self):
-        self.action_browser.append("User performed an action")
+        self.action_browser.append("It's time to D-D-D-D-D-D-D-D-D-Duel!!!")
+        self.battle_window = SideWindow()
+        self.battle_window.show()
 
     def receive_character(self, character_description):
         self.data_received = character_description
@@ -144,7 +145,9 @@ class MyMainWindow(QMainWindow):
         self.action_browser.append(f"Created a character named: {self.data_received[0]}")
 
 
-if __name__ == "__main__":
+def open_app():
+    # TODO temporary solution.
+    global window
     app = QApplication(sys.argv)
     window = MyMainWindow()
     window.show()
