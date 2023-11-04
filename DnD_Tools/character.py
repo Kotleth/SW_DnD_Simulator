@@ -1,8 +1,5 @@
-import random as r
 from math import ceil
 from weaponry import *
-from additions import *
-from typing import Type
 
 
 class Unit:
@@ -26,7 +23,7 @@ class Unit:
 
     def __init__(self, name: str, strength: int, dexterity: int, constitution: int,
                  intelligence: int, wisdom: int, charisma: int, level: int,
-                 character_class: CharacterClass, vitality_points: int = None):
+                 character_class: CharacterClass, vitality_points: int = None, add_to_list=True):
         self.character_class = character_class
         self.level = level
         self.name = name
@@ -46,6 +43,13 @@ class Unit:
         else:
             self.vitality_points = vitality_points
         self.current_vitality_points = self.vitality_points
+
+        if name in UnitList.units_dict.keys():
+            raise Exception(f"'{name.title()}'There is already a unit with that name!")
+        else:
+            if add_to_list:
+                UnitList.update_dict(self)
+                print(UnitList.units_dict.keys())
 
     def add_resistances(self, *resistances):
         for _resistance in resistances:
@@ -153,10 +157,20 @@ class Unit:
 
 class UnitList:
     units_dict: dict[str, Unit] = {}
-    aragorn = Unit(name='Aragorn', strength=16, dexterity=16,
-                   constitution=14, intelligence=14,
-                   wisdom=15, charisma=14,
-                   level=12, character_class=CharacterClassList.undefined_class)
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(UnitList, cls).__new__(cls)
+        return cls._instance
+
+    @classmethod
+    def update_dict(cls, unit: Unit):
+        cls.units_dict[unit.name] = unit
+
+    @classmethod
+    def get_unit(cls, unit_name):
+        return cls.units_dict[unit_name]
 
     @classmethod
     def get_classes_list(cls):

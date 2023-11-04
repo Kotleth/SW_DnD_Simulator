@@ -66,7 +66,7 @@ class CharacterClass:
 
         if self.initializer:
             if name in CharacterClassList.character_classes_dict.keys():
-                raise Exception(f"'{name.title()}'There is already a weapon with that name!")
+                raise Exception(f"'{name.title()}'There is already a class with that name!")
         else:
             CharacterClass.initializer = True
         if add_to_list:

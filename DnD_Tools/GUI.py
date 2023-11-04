@@ -2,12 +2,23 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLineEdit, \
     QPushButton, QDialog, QLabel, QComboBox, QCompleter, QTextBrowser, QHBoxLayout
 from PySide6.QtCore import Signal, Slot, Qt
+
 from additions import CharacterClassList
+from character import UnitList, Unit
+
+units_by_id_dict: [int, Unit] = {}
+occupied_id = 0
 
 
-class SideWindow(QDialog):
+class BattleWindow(QDialog):
     def __init__(self):
         super().__init__()
+
+        self.new_team1_mate = None
+        self.new_team2_mate = None
+
+        self.team_1 = []
+        self.team_2= []
 
         self.setWindowTitle("Battle simulator")
         self.setGeometry(900, 100, 300, 400)
@@ -18,29 +29,60 @@ class SideWindow(QDialog):
         dialog = QDialog()
         dialog_layout = QVBoxLayout(dialog)
 
-        label = QLabel("This is the dialog content.")
-        dialog_layout.addWidget(label)
+        self.battle_history = QTextBrowser(self)
+        dialog_layout.addWidget(self.battle_history)
+        self.battle_history.append("BATTLE STATUS:")
 
         dialog_buttons_layout = QHBoxLayout()
-        button1 = QPushButton("Button 1")
-        button2 = QPushButton("Button 2")
-        dialog_buttons_layout.addWidget(button1)
-        dialog_buttons_layout.addWidget(button2)
+
+        # Team 1 append button
+        append_member_team_1 = QPushButton("Append to team 1")
+        dialog_buttons_layout.addWidget(append_member_team_1)
+        append_member_team_1.clicked.connect(self.team_1_append)
+
+        # Team 2 append button
+        append_member_team_2 = QPushButton("Append to team 2")
+        dialog_buttons_layout.addWidget(append_member_team_2)
+        append_member_team_2.clicked.connect(self.team_2_append)
+
         dialog_layout.addLayout(dialog_buttons_layout)
-
         layout.addWidget(dialog)
-
         another_layer = QHBoxLayout()
 
         # Create buttons on each side of the dialog
-        button_left = QPushButton("Left Button")
-        button_right = QPushButton("Right Button")
+        self.team_1_combo = QComboBox()
+        self.team_1_combo.addItems(list(UnitList.units_dict.keys()))
+        self.team_1_combo.currentIndexChanged.connect(self.team_1_choose)
 
-        another_layer.addWidget(button_left)
-        another_layer.addWidget(button_right)
+        # Create buttons on each side of the dialog
+        self.team_2_combo = QComboBox()
+        self.team_2_combo.addItems(list(UnitList.units_dict.keys()))
+        self.team_2_combo.currentIndexChanged.connect(self.team_1_choose)
+
+        # button_left = QPushButton("Left Button")
+        # button_right = QPushButton("Right Button")
+
+        another_layer.addWidget(self.team_1_combo)
+        another_layer.addWidget(self.team_2_combo)
         dialog_layout.addLayout(another_layer)
 
         self.setLayout(layout)
+
+    def team_1_choose(self, index):
+        self.new_team1_mate = self.team_1_combo.itemText(index)
+        print(f"Selected item: {self.new_team1_mate}")
+
+    def team_1_append(self):
+        global occupied_id
+        self.team_1.append(UnitList.units_dict[self.team_1_combo.currentText()])
+        print(self.team_1)
+        units_by_id_dict[occupied_id] = UnitList.units_dict[self.team_1_combo.currentText()]
+        self.battle_history.append(f"\nAdded to team 1:\nId: {occupied_id}\tName: {units_by_id_dict[occupied_id].name}")
+        occupied_id += 1
+        print(units_by_id_dict.keys())
+
+    def team_2_append(self):
+        print("XD")
 
 
 class CharacterWindow(QDialog):
@@ -136,7 +178,7 @@ class MyMainWindow(QMainWindow):
 
     def log_action(self):
         self.action_browser.append("It's time to D-D-D-D-D-D-D-D-D-Duel!!!")
-        self.battle_window = SideWindow()
+        self.battle_window = BattleWindow()
         self.battle_window.show()
 
     def receive_character(self, character_description):

@@ -1,6 +1,8 @@
 from os import path
 from csv import writer
-from weaponry import *
+from additions import CharacterClass, CharacterClassList
+from weaponry import Weapon, WeaponList
+from character import Unit, UnitList
 
 # TODO builder for weapons, armors and character classes
 
@@ -16,19 +18,31 @@ weapon_list = [
 
 
 def build_classes_list():
-    """ Creates a weapon list """
+    """ Creates a classes list """
     CharacterClass(name='soldier', vitality_dice=12)
     CharacterClass(name='jedi knight', vitality_dice=10)
     CharacterClass(name='scoundrel', vitality_dice=8)
 
 
 def build_weapon_list():
-    """ Creates a weapon list """
+    """ Creates a weapons list """
     Weapon(name='long sword', number_of_dice=1, die_max_value=10, crit_chance=19, multiplier_crit=2, damage_type='slashing', weapon_range='sword')
     Weapon(name='short sword', number_of_dice=1, die_max_value=8, crit_chance=19, multiplier_crit=2, damage_type='slashing', weapon_range=1)
     Weapon(name='blaster', number_of_dice=1, die_max_value=10, crit_chance=19, multiplier_crit=2, damage_type='energy', weapon_range='blaster')
-    Weapon(name='energy crossbow', static_damage=2, number_of_dice=2, die_max_value=6, crit_chance=19, multiplier_crit=2, damage_type='energy',
-           weapon_range='crossbow')
+
+
+
+def build_units_list():
+    """ Creates a units list """
+    Unit(name='Aragorn', strength=16, dexterity=16,
+         constitution=14, intelligence=14,
+         wisdom=15, charisma=14,
+         level=12, character_class=CharacterClassList.undefined_class)
+    Unit(name='Legolas', strength=12, dexterity=19,
+         constitution=12, intelligence=14,
+         wisdom=16, charisma=12,
+         level=12, character_class=CharacterClassList.undefined_class)
+
 
 # with open(weapon_list_dir, mode='a') as file:
 #     csv_writer = writer(file, delimiter=';')
