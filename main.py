@@ -21,17 +21,12 @@ if __name__ == '__main__':
     build_basics()
     df = pd.read_csv(weapon_list_dir, sep=';')
     print(df)
-    # aragorn = Unit(name='Aragorn', strength=16, dexterity=16,
-    #                constitution=14, intelligence=14,
-    #                wisdom=15, charisma=14,
-    #                level=12, character_class=CharacterClassList.undefined_class)
     aragorn = UnitList.get_unit('Aragorn')
     legolas = UnitList.get_unit('Legolas')
     check_basics()
     generic_actions.perform_attack(legolas.attack(aragorn, weapon=WeaponList.weapon_dict['short sword']))
     aragorn.put_on_weapon(WeaponList.weapon_dict['blaster'])
     legolas.put_on_weapon(WeaponList.weapon_dict['blaster'])
-    # generic_actions.duel_series(aragorn, legolas, show_fight_description=True)
     print("XDDDD")
     print(UnitList.units_dict.keys())
     print(WeaponList.weapon_dict.keys())

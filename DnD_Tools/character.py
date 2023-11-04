@@ -44,12 +44,19 @@ class Unit:
             self.vitality_points = vitality_points
         self.current_vitality_points = self.vitality_points
 
-        if name in UnitList.units_dict.keys():
-            raise Exception(f"'{name.title()}'There is already a unit with that name!")
-        else:
-            if add_to_list:
+        if add_to_list:
+            if name in UnitList.units_dict.keys():
+                raise Exception(f"'{name.title()}'There is already a unit with that name!")
+            else:
                 UnitList.update_dict(self)
                 print(UnitList.units_dict.keys())
+
+    def __copy__(self):
+        new_instance = Unit(name=self.name, strength=self.strength.value, dexterity=self.dexterity.value,
+                            constitution=self.constitution.value, intelligence=self.intelligence.value,
+                            wisdom=self.wisdom.value, charisma=self.wisdom.value,
+                            level=self.level, character_class=self.character_class, add_to_list=False)
+        return new_instance
 
     def add_resistances(self, *resistances):
         for _resistance in resistances:
@@ -64,7 +71,7 @@ class Unit:
         self._misc_modifiers.clear()
 
     def show_status(self):
-        print("/\\"*10)
+        print("/\\" * 10)
         print(f"Name: {self.name}"
               f"\nClass: {self.character_class.name}\tLevel: {self.level}"
               f"\nAttributes:"
@@ -77,7 +84,7 @@ class Unit:
               f"\nProficiency: {self.proficiency}"
               f"\nArmor class: {self.armor_class}\t Vitality points: {self.current_vitality_points}/{self.vitality_points}"
               )
-        print("\\/"*10)
+        print("\\/" * 10)
 
     def reset_armor(self):
         self.armor_class = 10 + self.dexterity.get_bonus()
@@ -142,15 +149,18 @@ class Unit:
             if attack_roll >= weapon.crit_chance:
                 crit_verification = r.randint(1, 20) + stat_bonus_damage + self.proficiency + to_hit_misc_bonus
                 if crit_verification >= target.armor_class:
-                    crit_damage_dice_result_list, crit_damage = calc_weapon_damage(weapon.number_of_dice, weapon.die_max_value)
+                    crit_damage_dice_result_list, crit_damage = calc_weapon_damage(weapon.number_of_dice,
+                                                                                   weapon.die_max_value)
                     damage_dealt += target.get_damage(hit_value=hit_value,
                                                       damage_instance=DamageInstance({weapon.damage_type: crit_damage}),
                                                       weapon_range=weapon.normal_range)
                     crit_occurrence = True
-        damage_dice_result_list, damage = calc_weapon_damage(weapon.number_of_dice * crit_multiplier, weapon.die_max_value, damage)
+        damage_dice_result_list, damage = calc_weapon_damage(weapon.number_of_dice * crit_multiplier,
+                                                             weapon.die_max_value, damage)
         # pycharm will tell you that parameter self is unfulfilled but don't listen to him, he is lying
-        damage_dealt += target.get_damage(hit_value=hit_value, damage_instance=DamageInstance({weapon.damage_type: damage}),
-                                                      weapon_range=weapon.normal_range)
+        damage_dealt += target.get_damage(hit_value=hit_value,
+                                          damage_instance=DamageInstance({weapon.damage_type: damage}),
+                                          weapon_range=weapon.normal_range)
 
         return attack_roll, damage_dealt, damage_dice_result_list + crit_damage_dice_result_list, participants, crit_occurrence
 

@@ -1,3 +1,4 @@
+import copy
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLineEdit, \
     QPushButton, QDialog, QLabel, QComboBox, QCompleter, QTextBrowser, QHBoxLayout
@@ -6,7 +7,11 @@ from PySide6.QtCore import Signal, Slot, Qt
 from additions import CharacterClassList
 from character import UnitList, Unit
 
-units_by_id_dict: [int, Unit] = {}
+# units_by_id_dict: [int, Unit] = {}
+team_1_dict: [int, Unit] = {}
+team_2_dict: [int, Unit] = {}
+team_1_list = []
+team_2_list = []
 occupied_id = 0
 
 
@@ -17,8 +22,8 @@ class BattleWindow(QDialog):
         self.new_team1_mate = None
         self.new_team2_mate = None
 
-        self.team_1 = []
-        self.team_2= []
+        self.team_1: list[Unit] = []
+        self.team_2: list[Unit] = []
 
         self.setWindowTitle("Battle simulator")
         self.setGeometry(900, 100, 300, 400)
@@ -47,42 +52,90 @@ class BattleWindow(QDialog):
 
         dialog_layout.addLayout(dialog_buttons_layout)
         layout.addWidget(dialog)
-        another_layer = QHBoxLayout()
+        char_lists_layer = QHBoxLayout()
 
-        # Create buttons on each side of the dialog
-        self.team_1_combo = QComboBox()
-        self.team_1_combo.addItems(list(UnitList.units_dict.keys()))
-        self.team_1_combo.currentIndexChanged.connect(self.team_1_choose)
+        # Combo box for choosing member for team
+        self.team_combo = QComboBox()
+        self.team_combo.addItems(list(UnitList.units_dict.keys()))
 
-        # Create buttons on each side of the dialog
-        self.team_2_combo = QComboBox()
-        self.team_2_combo.addItems(list(UnitList.units_dict.keys()))
-        self.team_2_combo.currentIndexChanged.connect(self.team_1_choose)
+        start_battle_layout = QHBoxLayout()
 
-        # button_left = QPushButton("Left Button")
-        # button_right = QPushButton("Right Button")
+        # Create button to start battle
+        self.start_battle_button = QPushButton("Start battle")
+        dialog_buttons_layout.addWidget(self.start_battle_button)
+        self.start_battle_button.clicked.connect(self.start_battle)
 
-        another_layer.addWidget(self.team_1_combo)
-        another_layer.addWidget(self.team_2_combo)
-        dialog_layout.addLayout(another_layer)
+        pop_buttons_layout = QHBoxLayout()
+
+        # Team 1 remove button
+        self.remove_member_team_1 = QPushButton("Pop team 1")
+        dialog_buttons_layout.addWidget(self.remove_member_team_1)
+        self.remove_member_team_1.clicked.connect(self.pop_team_1)
+
+        # Team 2 remove button
+        self.remove_member_team_2 = QPushButton("Pop team 2")
+        dialog_buttons_layout.addWidget(self.remove_member_team_2)
+        self.remove_member_team_2.clicked.connect(self.pop_team_2)
+
+        pop_buttons_layout.addWidget(self.remove_member_team_1)
+        pop_buttons_layout.addWidget(self.remove_member_team_2)
+        dialog_layout.addLayout(pop_buttons_layout)
+
+        char_lists_layer.addWidget(self.team_combo)
+        dialog_layout.addLayout(char_lists_layer)
+
+        start_battle_layout.addWidget(self.start_battle_button)
+        dialog_layout.addLayout(start_battle_layout)
 
         self.setLayout(layout)
 
+    def start_battle(self):
+        print(team_1_list)
+        print(team_2_list)
+        print([x.name for x in self.team_1])
+        print([x.name for x in self.team_2])
+
+    def pop_team_1(self):
+        if team_1_dict:
+            self.battle_history.append(f"Remove from team 1: {team_1_dict.pop(max(team_1_dict.keys())).name}")
+        else:
+            self.battle_history.append("Team 1 is empty!")
+
+    def pop_team_2(self):
+        if team_2_dict:
+            self.battle_history.append(f"Remove from team 2: {team_2_dict.pop(max(team_2_dict.keys())).name}")
+        else:
+            self.battle_history.append("Team 2 is empty!")
+        # last_element = self.team_1.pop()
+        # for key, value in team_1_dict.items():
+        #     if
+        #     units_by_id_dict[]
+
     def team_1_choose(self, index):
-        self.new_team1_mate = self.team_1_combo.itemText(index)
+        self.new_team1_mate = self.team_combo.itemText(index)
         print(f"Selected item: {self.new_team1_mate}")
 
     def team_1_append(self):
         global occupied_id
-        self.team_1.append(UnitList.units_dict[self.team_1_combo.currentText()])
-        print(self.team_1)
-        units_by_id_dict[occupied_id] = UnitList.units_dict[self.team_1_combo.currentText()]
-        self.battle_history.append(f"\nAdded to team 1:\nId: {occupied_id}\tName: {units_by_id_dict[occupied_id].name}")
+        new_unit = copy.copy(UnitList.units_dict[self.team_combo.currentText()])
+        self.team_1.append(new_unit)
+        team_1_dict[occupied_id] = new_unit
+        self.battle_history.append(f"\nAdded to team 1:\nId: {occupied_id}\tName: {team_1_dict[occupied_id].name}")
+        team_1_list.append(occupied_id)
         occupied_id += 1
-        print(units_by_id_dict.keys())
+
+    def team_2_choose(self, index):
+        self.new_team2_mate = self.team_combo.itemText(index)
+        print(f"Selected item: {self.new_team2_mate}")
 
     def team_2_append(self):
-        print("XD")
+        global occupied_id
+        new_unit = copy.copy(UnitList.units_dict[self.team_combo.currentText()])
+        self.team_2.append(new_unit)
+        team_2_dict[occupied_id] = new_unit
+        self.battle_history.append(f"\nAdded to team 2:\nId: {occupied_id}\tName: {team_2_dict[occupied_id].name}")
+        team_2_list.append(occupied_id)
+        occupied_id += 1
 
 
 class CharacterWindow(QDialog):
