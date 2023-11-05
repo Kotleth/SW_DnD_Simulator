@@ -7,6 +7,7 @@ from PySide6.QtCore import Signal, Slot, Qt
 from additions import CharacterClassList
 from character import UnitList, Unit
 from generic_actions import start_battle
+from content_builder import WeaponList
 
 # units_by_id_dict: [int, Unit] = {}
 team_even_dict: [int, Unit] = {}
@@ -56,10 +57,6 @@ class BattleWindow(QDialog):
         layout.addWidget(dialog)
         char_lists_layer = QHBoxLayout()
 
-        # Combo box for choosing member for team
-        self.team_combo = QComboBox()
-        self.team_combo.addItems(list(UnitList.units_dict.keys()))
-
         start_battle_layout = QHBoxLayout()
 
         # Create button to start battle
@@ -82,6 +79,19 @@ class BattleWindow(QDialog):
         pop_buttons_layout.addWidget(self.remove_member_team_1)
         pop_buttons_layout.addWidget(self.remove_member_team_2)
         dialog_layout.addLayout(pop_buttons_layout)
+
+        lists_layout = QHBoxLayout()
+
+        # Combo box for choosing member for team
+        self.team_combo = QComboBox()
+        self.team_combo.addItems(list(UnitList.units_dict.keys()))
+        lists_layout.addWidget(self.team_combo)
+
+        # List of weapons to choose from
+        self.weapon_list_combo = QComboBox()
+        self.weapon_list_combo.addItems(['Default'] + [weapon_name.title() for weapon_name in WeaponList.weapon_dict.keys()])
+        lists_layout.addWidget(self.weapon_list_combo)
+        dialog_layout.addLayout(lists_layout)
 
         show_team_layout = QHBoxLayout()
 
@@ -150,20 +160,30 @@ class BattleWindow(QDialog):
     def team_1_append(self):
         global occupied_team_even_id
         new_unit = copy.copy(UnitList.units_dict[self.team_combo.currentText()])
+        _weapon = self.weapon_list_combo.currentText()
+        if not _weapon == "Default":
+            new_unit.put_on_weapon(WeaponList.weapon_dict[_weapon.lower()])
         self.team_even.append(new_unit)
         team_even_dict[occupied_team_even_id] = new_unit
         new_unit.unit_id = occupied_team_even_id
-        self.battle_history.append(f"\nAdded to Team Even:\nId: {occupied_team_even_id}\tName: {team_even_dict[occupied_team_even_id].name}")
+        self.battle_history.append(f"\nAdded to Team Even:\nId: {occupied_team_even_id}\t"
+                                   f"Name: {team_even_dict[occupied_team_even_id].name}\n"
+                                   f"Equipped with: {new_unit.weapon.name.title()}")
         team_1_list.append(occupied_team_even_id)
         occupied_team_even_id += 2
 
     def team_2_append(self):
         global occupied_team_odd_id
         new_unit = copy.copy(UnitList.units_dict[self.team_combo.currentText()])
+        _weapon = self.weapon_list_combo.currentText()
+        if not _weapon == "Default":
+            new_unit.put_on_weapon(WeaponList.weapon_dict[_weapon.lower()])
         self.team_odd.append(new_unit)
         team_odd_dict[occupied_team_odd_id] = new_unit
         new_unit.unit_id = occupied_team_odd_id
-        self.battle_history.append(f"\nAdded to Team Odd:\nId: {occupied_team_odd_id}\tName: {team_odd_dict[occupied_team_odd_id].name}")
+        self.battle_history.append(f"\nAdded to Team Odd:\nId: {occupied_team_odd_id}\t"
+                                   f"Name: {team_odd_dict[occupied_team_odd_id].name}\n"
+                                   f"Equipped with: {new_unit.weapon.name.title()}")
         team_2_list.append(occupied_team_odd_id)
         occupied_team_odd_id += 2
 
@@ -211,9 +231,9 @@ class CharacterWindow(QDialog):
                 text_input.setFixedWidth(200)
                 text_input.setFixedHeight(30)
 
-        button = QPushButton("Create", self)
-        button.clicked.connect(self.character_create)
-        layout.addWidget(button)
+        self.create_button = QPushButton("Create", self)
+        self.create_button.clicked.connect(self.character_create)
+        layout.addWidget(self.create_button)
 
         self.setLayout(layout)
 
