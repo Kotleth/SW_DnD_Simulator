@@ -43,9 +43,9 @@ class BattleWindow(QDialog):
         dialog_buttons_layout = QHBoxLayout()
 
         # Team 1 append button
-        append_member_team_1 = QPushButton("Append to team 1")
-        dialog_buttons_layout.addWidget(append_member_team_1)
-        append_member_team_1.clicked.connect(self.team_1_append)
+        self.append_member_team_1 = QPushButton("Append to team 1")
+        dialog_buttons_layout.addWidget(self.append_member_team_1)
+        self.append_member_team_1.clicked.connect(self.team_1_append)
 
         # Team 2 append button
         append_member_team_2 = QPushButton("Append to team 2")
@@ -100,6 +100,7 @@ class BattleWindow(QDialog):
         dialog_layout.addLayout(start_battle_layout)
 
         self.setLayout(layout)
+        self.start_battle_button.setFocus()
 
     def show_message(self, *messages):
         for message in messages:
@@ -141,8 +142,9 @@ class BattleWindow(QDialog):
         else:
             self.battle_history.append("Team Odd is empty!")
 
-    def team_1_choose(self, index):
+    def team_list_function(self, index):
         self.new_team1_mate = self.team_combo.itemText(index)
+        self.team_combo.addItems(list(UnitList.units_dict.keys()))
         print(f"Selected item: {self.new_team1_mate}")
 
     def team_1_append(self):
@@ -220,8 +222,6 @@ class CharacterWindow(QDialog):
             self.character_pass.emit([x.text() if type(x) == QLineEdit else x.currentText() for x in self.text_inputs])
         else:
             window.action_browser.append(f"No such class as {self.text_inputs[1].text().lower().title()}")
-            print(f"No such class as {self.text_inputs[1].text().lower().title()}")
-
 
 class MyMainWindow(QMainWindow):
     def __init__(self):
@@ -231,31 +231,45 @@ class MyMainWindow(QMainWindow):
         self.battle_window = None
 
         self.setWindowTitle("D&D Simulator")
-        self.setGeometry(100, 100, 400, 300)
+        self.setGeometry(100, 100, 400, 400)
 
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
 
         layout = QVBoxLayout()
 
+        # A button to open the character creation
+        self.character_creation_window_button = QPushButton("Open Character Creation", self)
+        self.character_creation_window_button.clicked.connect(self.open_character_creation)
+        layout.addWidget(self.character_creation_window_button)
+
         # Create a button to open the side window
-        open_button = QPushButton("Open Character Creation", self)
-        open_button.clicked.connect(self.open_character_creation)
-        layout.addWidget(open_button)
+        self.settings_window_button = QPushButton("Settings", self)
+        self.settings_window_button.clicked.connect(self.settings)
+        layout.addWidget(self.settings_window_button)
+
+        # A text browser that shows every move of a user
+        # TODO is it necessary?
         self.action_browser = QTextBrowser(self)
         layout.addWidget(self.action_browser)
 
-        self.log_button = QPushButton("Open Battle Simulator", self)
-        self.log_button.clicked.connect(self.log_action)
-        layout.addWidget(self.log_button)
+        # A button to open battle simulator
+        self.battle_window_button = QPushButton("Open Battle Simulator", self)
+        self.battle_window_button.clicked.connect(self.log_action)
+        layout.addWidget(self.battle_window_button)
 
         central_widget.setLayout(layout)
+        self.battle_window_button.setFocus()
 
     def open_character_creation(self):
         self.action_browser.append("Opened character creation")
         self.char_creation_window = CharacterWindow()
         self.char_creation_window.character_pass.connect(self.receive_character)
         self.char_creation_window.show()
+
+    def settings(self):
+        # TODO placeholder
+        self.action_browser.append("Not implemented yet!")
 
     def log_action(self):
         self.action_browser.append("It's time to D-D-D-D-D-D-D-D-D-Duel!!!")
@@ -264,7 +278,10 @@ class MyMainWindow(QMainWindow):
 
     def receive_character(self, character_description):
         self.data_received = character_description
-        CharacterClassList.character_classes_dict[self.data_received[0]] = self.data_received
+        UnitList.units_dict[self.data_received[0]] = self.data_received
+        if self.battle_window:
+            self.battle_window.team_combo.clear()
+            self.battle_window.team_combo.addItems(list(UnitList.units_dict.keys()))
         self.action_browser.append(f"Created a character named: {self.data_received[0]}")
 
 

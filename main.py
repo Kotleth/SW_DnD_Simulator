@@ -1,7 +1,7 @@
 import pandas as pd
 
 from DnD_Tools import generic_actions
-from DnD_Tools.content_builder import *
+from content_builder import *
 from DnD_Tools.GUI import *
 
 
