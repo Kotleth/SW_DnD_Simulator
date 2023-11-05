@@ -19,7 +19,7 @@ class Weapon:
     initializer = False
 
     def __init__(self, name, damage_type, weapon_type='Unknown', weapon_range=None, die_max_value=1, number_of_dice=0,
-                 static_damage=0, crit_chance=1,
+                 static_damage=0, crit_chance=20,
                  multiplier_crit=2, add_to_list=True, price=0, traits=None):
         if weapon_range is None:
             weapon_range = 1

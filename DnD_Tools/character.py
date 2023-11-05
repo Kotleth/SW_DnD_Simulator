@@ -20,6 +20,7 @@ class Unit:
     feats_list: list[str] = []
     weapon: Weapon
     armor: Armor
+    unit_id: int = None
 
     def __init__(self, name: str, strength: int, dexterity: int, constitution: int,
                  intelligence: int, wisdom: int, charisma: int, level: int,
@@ -121,7 +122,13 @@ class Unit:
         crit_occurrence = False
         crit_damage_dice_result_list = []
         damage_dealt = 0
-        participants = (self.name, target.name)
+        attacker_name = self.name
+        defender_name = target.name
+        if self.unit_id is not None:
+            attacker_name += f" [{self.unit_id}]"
+        if target.unit_id is not None:
+            defender_name += f" [{target.unit_id}]"
+        participants = (attacker_name, defender_name)
         crit_multiplier = 1
         if weapon is None:
             weapon = self.weapon

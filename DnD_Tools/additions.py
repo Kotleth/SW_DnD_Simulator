@@ -137,15 +137,14 @@ def range_parse(weapon_range):
 
 
 class ColorText:
-    header = '\033[95m'
-    blue = '\033[94m'
-    cyan = '\033[96m'
-    green = '\033[92m'
-    yellow = '\033[93m'
-    red = '\033[91m'
-    end = '\033[0m'
-    bold = '\033[1m'
-    underline = '\033[4m'
+    red = '<span style="color:red;">'
+    green = '<span style="color:green;">'
+    yellow = '<span style="color:yellow;">'
+    end = '</span>'
+    blue = '<span style="color:blue;">'
+    cyan = '<span style="color:cyan;">'
+    bold = '<span style="font-weight:bold;">'
+    underline = '<span style="text-decoration:underline;">'
 
 
 def calc_weapon_damage(number_of_dice, die_max_value, damage=0):

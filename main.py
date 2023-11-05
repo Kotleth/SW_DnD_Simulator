@@ -30,22 +30,5 @@ if __name__ == '__main__':
     print("XDDDD")
     print(UnitList.units_dict.keys())
     print(WeaponList.weapon_dict.keys())
-    Weapon(name='energy crossbow', static_damage=2, number_of_dice=2, die_max_value=6, crit_chance=19,
-           multiplier_crit=2, damage_type='energy',
-           weapon_range='crossbow')
     print(WeaponList.weapon_dict.keys())
-    Unit(name='John', strength=16, dexterity=16,
-         constitution=14, intelligence=14,
-         wisdom=15, charisma=14,
-         level=12, character_class=CharacterClassList.undefined_class)
-    Unit(name='Bovi', strength=16, dexterity=16,
-         constitution=14, intelligence=14,
-         wisdom=15, charisma=14,
-         level=12, character_class=CharacterClassList.undefined_class)
-    # global window
-    # app = QApplication(sys.argv)
-    # window = MyMainWindow()
-    # window.show()
-    # sys.exit(app.exec_())
-
     open_app()

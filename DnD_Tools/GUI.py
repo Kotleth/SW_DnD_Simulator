@@ -6,13 +6,15 @@ from PySide6.QtCore import Signal, Slot, Qt
 
 from additions import CharacterClassList
 from character import UnitList, Unit
+from generic_actions import start_battle
 
 # units_by_id_dict: [int, Unit] = {}
-team_1_dict: [int, Unit] = {}
-team_2_dict: [int, Unit] = {}
+team_even_dict: [int, Unit] = {}
+team_odd_dict: [int, Unit] = {}
 team_1_list = []
 team_2_list = []
-occupied_id = 0
+occupied_team_even_id = 0
+occupied_team_odd_id = 1
 
 
 class BattleWindow(QDialog):
@@ -22,11 +24,11 @@ class BattleWindow(QDialog):
         self.new_team1_mate = None
         self.new_team2_mate = None
 
-        self.team_1: list[Unit] = []
-        self.team_2: list[Unit] = []
+        self.team_even: list[Unit] = []
+        self.team_odd: list[Unit] = []
 
         self.setWindowTitle("Battle simulator")
-        self.setGeometry(900, 100, 300, 400)
+        self.setGeometry(900, 100, 500, 900)
 
         layout = QVBoxLayout()
 
@@ -68,12 +70,12 @@ class BattleWindow(QDialog):
         pop_buttons_layout = QHBoxLayout()
 
         # Team 1 remove button
-        self.remove_member_team_1 = QPushButton("Pop team 1")
+        self.remove_member_team_1 = QPushButton("Pop Team Even")
         dialog_buttons_layout.addWidget(self.remove_member_team_1)
         self.remove_member_team_1.clicked.connect(self.pop_team_1)
 
         # Team 2 remove button
-        self.remove_member_team_2 = QPushButton("Pop team 2")
+        self.remove_member_team_2 = QPushButton("Pop Team Odd")
         dialog_buttons_layout.addWidget(self.remove_member_team_2)
         self.remove_member_team_2.clicked.connect(self.pop_team_2)
 
@@ -81,61 +83,87 @@ class BattleWindow(QDialog):
         pop_buttons_layout.addWidget(self.remove_member_team_2)
         dialog_layout.addLayout(pop_buttons_layout)
 
+        show_team_layout = QHBoxLayout()
+
+        # Show teams
+        self.show_teams_button = QPushButton("Show teams members")
+        dialog_buttons_layout.addWidget(self.show_teams_button)
+        self.show_teams_button.clicked.connect(self.show_team)
+
         char_lists_layer.addWidget(self.team_combo)
         dialog_layout.addLayout(char_lists_layer)
+
+        show_team_layout.addWidget(self.show_teams_button)
+        dialog_layout.addLayout(show_team_layout)
 
         start_battle_layout.addWidget(self.start_battle_button)
         dialog_layout.addLayout(start_battle_layout)
 
         self.setLayout(layout)
 
+    def show_message(self, *messages):
+        for message in messages:
+            self.battle_history.append(message)
+
     def start_battle(self):
-        print(team_1_list)
-        print(team_2_list)
-        print([x.name for x in self.team_1])
-        print([x.name for x in self.team_2])
+        battle_report_list = start_battle(team_even=self.team_even, team_odd=self.team_odd)
+        self.battle_history.clear()
+        self.show_message("\tBATTLE BEGINS!\n")
+        print(battle_report_list)
+        for message in battle_report_list:
+            self.show_message(message)
+        self.show_message("\n\tBATTLE ENDS!")
+        [unit.long_rest() for unit in self.team_even + self.team_odd]
+
+    def show_team(self):
+        max_length = max(len(self.team_even), len(self.team_odd))
+        _team_even = [unit.name for unit in self.team_even]
+        _team_odd = [unit.name for unit in self.team_odd]
+
+        # Pad the shorter list with None values
+        _team_even += [''] * (max_length - len(_team_even))
+        _team_odd += [''] * (max_length - len(_team_odd))
+        self.battle_history.append(f"\nTeam even \t Team odd")
+        for even_member, odd_member in zip(_team_even, _team_odd):
+            self.battle_history.append(f"{even_member}\t{odd_member}")
 
     def pop_team_1(self):
-        if team_1_dict:
-            self.battle_history.append(f"Remove from team 1: {team_1_dict.pop(max(team_1_dict.keys())).name}")
+        if team_even_dict:
+            self.battle_history.append(f"Remove from Team Even: {team_even_dict.pop(max(team_even_dict.keys())).name}")
+            self.team_even.pop()
         else:
-            self.battle_history.append("Team 1 is empty!")
+            self.battle_history.append("Team Even is empty!")
 
     def pop_team_2(self):
-        if team_2_dict:
-            self.battle_history.append(f"Remove from team 2: {team_2_dict.pop(max(team_2_dict.keys())).name}")
+        if team_odd_dict:
+            self.battle_history.append(f"Remove from Team Odd: {team_odd_dict.pop(max(team_odd_dict.keys())).name}")
+            self.team_odd.pop()
         else:
-            self.battle_history.append("Team 2 is empty!")
-        # last_element = self.team_1.pop()
-        # for key, value in team_1_dict.items():
-        #     if
-        #     units_by_id_dict[]
+            self.battle_history.append("Team Odd is empty!")
 
     def team_1_choose(self, index):
         self.new_team1_mate = self.team_combo.itemText(index)
         print(f"Selected item: {self.new_team1_mate}")
 
     def team_1_append(self):
-        global occupied_id
+        global occupied_team_even_id
         new_unit = copy.copy(UnitList.units_dict[self.team_combo.currentText()])
-        self.team_1.append(new_unit)
-        team_1_dict[occupied_id] = new_unit
-        self.battle_history.append(f"\nAdded to team 1:\nId: {occupied_id}\tName: {team_1_dict[occupied_id].name}")
-        team_1_list.append(occupied_id)
-        occupied_id += 1
-
-    def team_2_choose(self, index):
-        self.new_team2_mate = self.team_combo.itemText(index)
-        print(f"Selected item: {self.new_team2_mate}")
+        self.team_even.append(new_unit)
+        team_even_dict[occupied_team_even_id] = new_unit
+        new_unit.unit_id = occupied_team_even_id
+        self.battle_history.append(f"\nAdded to Team Even:\nId: {occupied_team_even_id}\tName: {team_even_dict[occupied_team_even_id].name}")
+        team_1_list.append(occupied_team_even_id)
+        occupied_team_even_id += 2
 
     def team_2_append(self):
-        global occupied_id
+        global occupied_team_odd_id
         new_unit = copy.copy(UnitList.units_dict[self.team_combo.currentText()])
-        self.team_2.append(new_unit)
-        team_2_dict[occupied_id] = new_unit
-        self.battle_history.append(f"\nAdded to team 2:\nId: {occupied_id}\tName: {team_2_dict[occupied_id].name}")
-        team_2_list.append(occupied_id)
-        occupied_id += 1
+        self.team_odd.append(new_unit)
+        team_odd_dict[occupied_team_odd_id] = new_unit
+        new_unit.unit_id = occupied_team_odd_id
+        self.battle_history.append(f"\nAdded to Team Odd:\nId: {occupied_team_odd_id}\tName: {team_odd_dict[occupied_team_odd_id].name}")
+        team_2_list.append(occupied_team_odd_id)
+        occupied_team_odd_id += 2
 
 
 class CharacterWindow(QDialog):
