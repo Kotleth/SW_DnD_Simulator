@@ -51,7 +51,7 @@ class Weapon:
             self.traits.append(arg)
 
     def prepare_to_csv(self):
-        return [self.name, f'{self.number_of_dice}k{self.die_max_value}', self.damage_type, self.traits,
+        return [self.name, f'{self.static_damage} + {self.number_of_dice}k{self.die_max_value}', self.damage_type, self.traits,
                 self.multiplier_crit, self.crit_chance, f'{self.normal_range}|{self.long_range}', self.weapon_type,
                 self.price]
 

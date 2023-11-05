@@ -29,6 +29,23 @@ damage_types = [
                 ]
 
 
+class DamageTypes:
+    acid = "Acid"
+    bludgeon = "Bludgeon"
+    cold = "Cold"
+    electrical = "Electrical"
+    energy = "Energy"
+    fire = "Fire"
+    ion = "Ion"
+    necrotic = "Necrotic"
+    piercing = "Piercing"
+    poison = "Poison"
+    psychic = "Psychic"
+    radiation = "Radiation"
+    slashing = "Slashing"
+    sound = "Sound"
+
+
 class DamageInstance:
     damage_dict: dict
 
@@ -156,4 +173,23 @@ def calc_weapon_damage(number_of_dice, die_max_value, damage=0):
     return damage_dice_result_list, damage
 
 
+def parse_weapon_damage(damage: str) -> (int, int, int):
+    """Returns: static damage, number_of_dice, die_max_value"""
+    damage = damage.replace(" ", "")
+    if '+' in damage and 'k' in damage:
+        static_damage, dice_damage = damage.split("+")
+        number_of_dice, die_max_value = dice_damage.split("k")
+    elif 'k' in damage:
+        static_damage = 0
+        number_of_dice, die_max_value = damage.split("k")
+    else:
+        try:
+            static_damage = int(damage)
+            number_of_dice = 0
+            die_max_value = 0
+        except Exception as e:
+            print(f"Error = {e}")
+            print(f"Damage = {damage}")
+            raise ValueError("Wrong format of damage!")
+    return int(static_damage), int(number_of_dice), int(die_max_value)
 
