@@ -87,11 +87,21 @@ class Unit:
               )
         print("\\/" * 10)
 
-    def reset_armor(self):
+    def take_off_armor(self):
+        self.armor = None
         self.armor_class = 10 + self.dexterity.get_bonus()
 
     def put_on_weapon(self, weapon: Weapon):
         self.weapon = weapon
+
+    def put_on_armor(self, armor: Armor):
+        if self.strength.value >= armor.strength_required:
+            self.armor = armor
+            self.armor_class = self.armor.armor_class + min(self.dexterity.get_bonus(), self.armor.dex_bonus_limit)
+            return True
+        else:
+            print("You have not enough strength to wear this armor!")
+            return False
 
     def show_resistances(self):
         print(f"RESISTANCES OF {self.name}\n")

@@ -29,23 +29,6 @@ damage_types = [
                 ]
 
 
-class DamageTypes:
-    acid = "Acid"
-    bludgeon = "Bludgeon"
-    cold = "Cold"
-    electrical = "Electrical"
-    energy = "Energy"
-    fire = "Fire"
-    ion = "Ion"
-    necrotic = "Necrotic"
-    piercing = "Piercing"
-    poison = "Poison"
-    psychic = "Psychic"
-    radiation = "Radiation"
-    slashing = "Slashing"
-    sound = "Sound"
-
-
 class DamageInstance:
     damage_dict: dict
 
@@ -193,3 +176,27 @@ def parse_weapon_damage(damage: str) -> (int, int, int):
             raise ValueError("Wrong format of damage!")
     return int(static_damage), int(number_of_dice), int(die_max_value)
 
+
+class DamageTypes:
+    acid = "Acid"
+    bludgeon = "Bludgeon"
+    cold = "Cold"
+    electrical = "Electrical"
+    energy = "Energy"
+    fire = "Fire"
+    ion = "Ion"
+    necrotic = "Necrotic"
+    piercing = "Piercing"
+    poison = "Poison"
+    psychic = "Psychic"
+    radiation = "Radiation"
+    slashing = "Slashing"
+    sound = "Sound"
+
+
+class ArmorType:
+    unknown = 'unknown'
+    light = 'light'
+    medium = 'medium'
+    heavy = 'heavy'
+    power = 'power'

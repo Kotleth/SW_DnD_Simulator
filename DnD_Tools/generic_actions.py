@@ -27,30 +27,38 @@ def start_battle(team_even, team_odd, max_rounds=100):
             team_even_hp > 0 and
             team_odd_hp > 0):
         for attacking_unit in attack_order:
+            if attacking_unit.current_vitality_points < 1:
+                continue
             if is_odd(attacking_unit.unit_id):
-                if any([is_even(unit.unit_id) for unit in attack_order]):
-                    for defending_unit in attack_order:
-                        if is_even(defending_unit.unit_id):
-                            battle_report.append(perform_attack(attacking_unit.attack(defending_unit)))
-                            if defending_unit.current_vitality_points < 1:
-                                attack_order = [fighter for fighter in attack_order if fighter != defending_unit]
-                                fallen_list.append(defending_unit)
-                                battle_report.append(f"{defending_unit.name} [{defending_unit.unit_id}] has fallen!")
-                            break
-                else:
-                    break
+                battle_finished, attack_order, battle_report, fallen_list = \
+                    make_attack_action(attacking_unit, attack_order, battle_report, fallen_list, is_even)
+                # if any([is_even(unit.unit_id) for unit in attack_order]):
+                #     for defending_unit in attack_order:
+                #         if is_even(defending_unit.unit_id):
+                #             battle_report.append(perform_attack(attacking_unit.attack(defending_unit)))
+                #             if defending_unit.current_vitality_points < 1:
+                #                 attack_order = [fighter for fighter in attack_order if fighter != defending_unit]
+                #                 fallen_list.append(defending_unit)
+                #                 battle_report.append(f"{defending_unit.name} [{defending_unit.unit_id}] has fallen!")
+                #             break
+                # else:
+                #     break
             else:
-                if any([is_odd(unit.unit_id) for unit in attack_order]):
-                    for defending_unit in attack_order:
-                        if is_odd(defending_unit.unit_id):
-                            battle_report.append(perform_attack(attacking_unit.attack(defending_unit)))
-                            if defending_unit.current_vitality_points < 1:
-                                attack_order = [fighter for fighter in attack_order if fighter != defending_unit]
-                                fallen_list.append(defending_unit)
-                                battle_report.append(f"{defending_unit.name} [{defending_unit.unit_id}] has fallen!")
-                            break
-                else:
-                    break
+                battle_finished, attack_order, battle_report, fallen_list = \
+                    make_attack_action(attacking_unit, attack_order, battle_report, fallen_list, is_odd)
+                # if any([is_odd(unit.unit_id) for unit in attack_order]):
+                #     for defending_unit in attack_order:
+                #         if is_odd(defending_unit.unit_id):
+                #             battle_report.append(perform_attack(attacking_unit.attack(defending_unit)))
+                #             if defending_unit.current_vitality_points < 1:
+                #                 attack_order = [fighter for fighter in attack_order if fighter != defending_unit]
+                #                 fallen_list.append(defending_unit)
+                #                 battle_report.append(f"{defending_unit.name} [{defending_unit.unit_id}] has fallen!")
+                #             break
+                # else:
+                #     break
+            if battle_finished:
+                break
         current_round += 1
     for fallen in fallen_list:
         battle_report.append(f"{fallen.name} [{fallen.unit_id}] has fallen!")
@@ -67,6 +75,22 @@ def start_battle(team_even, team_odd, max_rounds=100):
         battle_report.append("Fight ended with an unexpected result! Check code!")
         raise Exception("Fight ended with an unexpected result! Check code!")
     return battle_report
+
+
+def make_attack_action(attacking_unit, attack_order, battle_report, fallen_list, enemy_id_func):
+    battle_finished = False
+    if any([enemy_id_func(unit.unit_id) for unit in attack_order]):
+        for defending_unit in attack_order:
+            if enemy_id_func(defending_unit.unit_id):
+                battle_report.append(perform_attack(attacking_unit.attack(defending_unit)))
+                if defending_unit.current_vitality_points < 1:
+                    attack_order = [fighter for fighter in attack_order if fighter != defending_unit]
+                    fallen_list.append(defending_unit)
+                    battle_report.append(f"{ColorText.red}{defending_unit.name} [{defending_unit.unit_id}] has fallen!{ColorText.end}<b>")
+                break
+    else:
+        battle_finished = True
+    return battle_finished, attack_order, battle_report, fallen_list
 
 
 def start_duel(duelist_1: Unit, duelist_2: Unit, max_rounds: int, show_fight_description=False):
