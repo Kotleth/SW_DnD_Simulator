@@ -1,0 +1,12 @@
+Name;Armor_Class;Dex_Bonus_Limit;Armor_Type;Strength_Required;Traits;Cost
+Padawan Robe;1;8;robes;-99;['None'];0
+Jedi Robe;2;8;robes;-99;['None'];0
+Master Robe;3;8;robes;-99;['None'];0
+Republic Light Armor;2;4;light;-99;['None'];0
+Federation Fiber Armor;3;4;light;-99;['None'];0
+Federation Protective Armor;4;3;medium;9;['None'];0
+Republic Battle Armor;5;3;medium;10;['None'];0
+Republic War Armor;6;2;medium;11;['None'];0
+Heavy War Armor;8;0;heavy;14;['None'];0
+Mandalorian Armor;9;0;heavy;15;['None'];0
+Durasteel Weapon Armor;10;0;heavy;15;['None'];0

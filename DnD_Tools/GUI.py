@@ -39,7 +39,7 @@ class BattleWindow(QDialog):
 
         self.battle_history = QTextBrowser(self)
         dialog_layout.addWidget(self.battle_history)
-        self.battle_history.append("BATTLE STATUS:")
+        self.show_message("BATTLE STATUS:")
 
         dialog_buttons_layout = QHBoxLayout()
 
@@ -113,17 +113,17 @@ class BattleWindow(QDialog):
         self.start_battle_button.setFocus()
 
     def show_message(self, *messages):
+        print(messages)
         for message in messages:
-            self.battle_history.append(message)
+            self.battle_history.append("<center>" + message + "</center>")
 
     def start_battle(self):
         battle_report_list = start_battle(team_even=self.team_even, team_odd=self.team_odd)
         self.battle_history.clear()
-        self.show_message("\tBATTLE BEGINS!\n")
-        print(battle_report_list)
+        self.show_message("BATTLE BEGINS!<br>")
         for message in battle_report_list:
             self.show_message(message)
-        self.show_message("\n\tBATTLE ENDS!")
+        self.show_message("<br>BATTLE ENDS!")
         [unit.long_rest() for unit in self.team_even + self.team_odd]
 
     def show_team(self):
@@ -134,28 +134,27 @@ class BattleWindow(QDialog):
         # Pad the shorter list with None values
         _team_even += [''] * (max_length - len(_team_even))
         _team_odd += [''] * (max_length - len(_team_odd))
-        self.battle_history.append(f"\nTeam even \t Team odd")
+        self.show_message(f"<br>Team even \t Team odd")
         for even_member, odd_member in zip(_team_even, _team_odd):
-            self.battle_history.append(f"{even_member}\t{odd_member}")
+            self.show_message(f"{even_member}\t{odd_member}")
 
     def pop_team_1(self):
         if team_even_dict:
-            self.battle_history.append(f"Remove from Team Even: {team_even_dict.pop(max(team_even_dict.keys())).name}")
+            self.show_message(f"Remove from Team Even: {team_even_dict.pop(max(team_even_dict.keys())).name}")
             self.team_even.pop()
         else:
-            self.battle_history.append("Team Even is empty!")
+            self.show_message("Team Even is empty!")
 
     def pop_team_2(self):
         if team_odd_dict:
-            self.battle_history.append(f"Remove from Team Odd: {team_odd_dict.pop(max(team_odd_dict.keys())).name}")
+            self.show_message(f"Remove from Team Odd: {team_odd_dict.pop(max(team_odd_dict.keys())).name}")
             self.team_odd.pop()
         else:
-            self.battle_history.append("Team Odd is empty!")
+            self.show_message("Team Odd is empty!")
 
     def team_list_function(self, index):
         self.new_team1_mate = self.team_combo.itemText(index)
         self.team_combo.addItems(list(UnitList.units_dict.keys()))
-        print(f"Selected item: {self.new_team1_mate}")
 
     def team_1_append(self):
         global occupied_team_even_id
@@ -166,9 +165,9 @@ class BattleWindow(QDialog):
         self.team_even.append(new_unit)
         team_even_dict[occupied_team_even_id] = new_unit
         new_unit.unit_id = occupied_team_even_id
-        self.battle_history.append(f"\nAdded to Team Even:\nId: {occupied_team_even_id}\t"
-                                   f"Name: {team_even_dict[occupied_team_even_id].name}\n"
-                                   f"Equipped with: {new_unit.weapon.name.title()}")
+        self.show_message(f"<br>Added to Team Even:<br>Id: {occupied_team_even_id}"
+                          f"<br>Name: {team_even_dict[occupied_team_even_id].name}"
+                          f"<br>Equipped with: {new_unit.weapon.name.title()}")
         team_1_list.append(occupied_team_even_id)
         occupied_team_even_id += 2
 
@@ -181,9 +180,9 @@ class BattleWindow(QDialog):
         self.team_odd.append(new_unit)
         team_odd_dict[occupied_team_odd_id] = new_unit
         new_unit.unit_id = occupied_team_odd_id
-        self.battle_history.append(f"\nAdded to Team Odd:\nId: {occupied_team_odd_id}\t"
-                                   f"Name: {team_odd_dict[occupied_team_odd_id].name}\n"
-                                   f"Equipped with: {new_unit.weapon.name.title()}")
+        self.show_message(f"<br>Added to Team Odd:<br>Id: {occupied_team_odd_id}"
+                          f"<br>Name: {team_odd_dict[occupied_team_odd_id].name}"
+                          f"<br>Equipped with: {new_unit.weapon.name.title()}")
         team_2_list.append(occupied_team_odd_id)
         occupied_team_odd_id += 2
 

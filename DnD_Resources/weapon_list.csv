@@ -1,0 +1,16 @@
+Name;Damage;Damage_type;Traits;Crit_multiplier;Crit_range;Range;Weapon_type;Price
+long sword;0 + 1k12;Slashing;['None'];2;20;1|1;Unknown;0
+short sword;0 + 1k8;Slashing;['None'];2;19;1|1;Unknown;0
+knuckle-duster;1 + 0k0;Bludgeon;['None'];2;19;1|1;Unknown;0
+rocket gauntlet;1 + 1k4;Bludgeon;['None'];2;19;1|1;Unknown;0
+vibroblade;0 + 1k8;Slashing;['None'];2;19;1|1;Unknown;0
+bastard sword;0 + 1k10;Slashing;['None'];2;20;1|1;Unknown;0
+vibrosword;0 + 1k12;Slashing;['None'];2;19;1|1;Unknown;0
+twohanded vibrosword;0 + 2k6;Slashing;['None'];2;19;1|1;Unknown;0
+vibroaxe;0 + 2k8;Slashing;['None'];2;20;1|1;Unknown;0
+light blaster;0 + 1k8;Energy;['None'];2;19;60|120;Unknown;0
+blaster;0 + 1k10;Energy;['None'];2;19;60|120;Unknown;0
+heavy blaster;0 + 1k12;Energy;['None'];2;20;60|120;Unknown;0
+energy rifle;0 + 2k6;Energy;['None'];2;19;120|240;Unknown;0
+heavy energy rifle;0 + 2k8;Energy;['None'];2;20;120|240;Unknown;0
+energy crossbow;2 + 2k6;Energy;['None'];2;19;90|180;Unknown;0

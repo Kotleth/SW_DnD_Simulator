@@ -111,20 +111,25 @@ class Armor:
     armor_type: str
     strength_required: int
     traits: list
+    cost: int
 
-    def __init__(self, name, armor_class, dex_bonus_limit=99, armor_type=ArmorType.unknown, strength_required=-99, traits=None):
+    def __init__(self, name, armor_class, dex_bonus_limit=99, armor_type=ArmorType.unknown, strength_required=-99,
+                 traits=None, cost=0, add_to_list=True):
         self.name = name
         self.armor_class = armor_class
         self.dex_bonus_limit = dex_bonus_limit
         self.armor_type = armor_type
         self.strength_required = strength_required
+        self.cost = cost
         if traits:
             self.traits = traits
         else:
             self.traits = ["None"]
+        if add_to_list:
+            ArmorList.armor_dict[self.name] = self
 
     def prepare_to_csv(self):
-        return [self.name, self.armor_class, self.dex_bonus_limit, self.armor_type, self.strength_required, self.traits]
+        return [self.name, self.armor_class, self.dex_bonus_limit, self.armor_type, self.strength_required, self.traits, self.cost]
 
     def show_status(self):
         print(
@@ -143,7 +148,7 @@ class ArmorList:
     However, I'm not sure why anyone would want to do that. For now, it stays like this.
     """
     armor_dict: dict[str, Armor] = {}
-    armorless = Armor(name="armorless", armor_class=0)
+    armorless = Armor(name="armorless", armor_class=0, add_to_list=False)
 
     _instance = None
 
