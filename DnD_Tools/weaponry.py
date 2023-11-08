@@ -38,7 +38,7 @@ class Weapon:
 
         if self.initializer:
             if name in WeaponList.weapon_dict.keys():
-                raise DuplicateNameError(f"'{name.title()}'There is already a weapon with that name!")
+                raise Exception(f"'{name.title()}'There is already a weapon with that name!")
         else:
             Weapon.initializer = True
         if add_to_list:
@@ -127,7 +127,7 @@ class Armor:
             self.traits = ["None"]
         if add_to_list:
             if name in ArmorList.armor_dict.keys():
-                raise DuplicateNameError(f"'{name.title()}'There is already a weapon with that name!")
+                raise Exception(f"'{name.title()}'There is already a weapon with that name!")
             else:
                 ArmorList.armor_dict[self.name] = self
 

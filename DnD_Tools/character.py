@@ -47,7 +47,7 @@ class Unit:
 
         if add_to_list:
             if name in UnitList.units_dict.keys():
-                raise DuplicateNameError(f"'{name.title()}'There is already a unit with that name!")
+                raise Exception(f"'{name.title()}'There is already a unit with that name!")
             else:
                 UnitList.update_dict(self)
 

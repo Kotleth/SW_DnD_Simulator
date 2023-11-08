@@ -1,5 +1,5 @@
 import unittest
-from content_builder import *
+from DnD_Resources.content_builder import *
 
 
 class TestMain(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestMain(unittest.TestCase):
 
         Weapon(name='~~dummy sword 3000~~', number_of_dice=2, die_max_value=6, crit_chance=19, multiplier_crit=3,
                damage_type=DamageTypes.slashing, weapon_range='sword')
-        with self.assertRaises(DuplicateNameError):
+        with self.assertRaises(Exception):
             Weapon(name='~~dummy sword 3000~~', number_of_dice=2, die_max_value=6, crit_chance=19, multiplier_crit=3,
                damage_type=DamageTypes.slashing, weapon_range='sword')
         the_hero = "~~Arnold Schwarzenegger~~"
@@ -22,14 +22,14 @@ class TestMain(unittest.TestCase):
              constitution=14, intelligence=14,
              wisdom=14, charisma=16,
              level=15, character_class=CharacterClassList.undefined_class)
-        with self.assertRaises(DuplicateNameError):
+        with self.assertRaises(Exception):
             Unit(name=the_hero, strength=hero_strength, dexterity=12,
                  constitution=14, intelligence=14,
                  wisdom=14, charisma=16,
                  level=15, character_class=CharacterClassList.undefined_class)
         self.assertEqual(UnitList.units_dict[the_hero].strength.get_bonus(), expected_bonus, 'Wrong strength bonus calculation!')
         Armor(name="~~dummy suite 3000~~", armor_class=1, dex_bonus_limit=8, armor_type="robes")
-        with self.assertRaises(DuplicateNameError):
+        with self.assertRaises(Exception):
             Armor(name="~~dummy suite 3000~~", armor_class=1, dex_bonus_limit=8, armor_type="robes")
 
 

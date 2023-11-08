@@ -200,7 +200,3 @@ class ArmorType:
     medium = 'medium'
     heavy = 'heavy'
     power = 'power'
-
-
-class DuplicateNameError(Exception):
-    pass

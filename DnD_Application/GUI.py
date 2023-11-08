@@ -4,9 +4,9 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, Q
     QPushButton, QDialog, QLabel, QComboBox, QCompleter, QTextBrowser, QHBoxLayout
 from PySide6.QtCore import Signal, Qt
 
-from additions import CharacterClassList
-from character import UnitList, Unit
-from generic_actions import start_battle
+from DnD_Tools.additions import CharacterClassList
+from DnD_Tools.character import UnitList, Unit
+from DnD_Tools.generic_actions import start_battle
 from content_builder import WeaponList
 
 # units_by_id_dict: [int, Unit] = {}

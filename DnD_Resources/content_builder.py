@@ -1,14 +1,12 @@
-from os import path
 from csv import writer, reader
-import pandas as pd
-from additions import *
-from weaponry import Weapon, WeaponList, Armor, ArmorList
-from character import Unit, UnitList
+from DnD_Tools.additions import *
+from DnD_Tools.weaponry import Weapon, WeaponList, Armor, ArmorList
+from DnD_Tools.character import Unit, UnitList
 
 # TODO builder for weapons, armors and character classes
 
-this_dir = path.dirname(path.abspath(__file__))
-resources_dir = this_dir + "/DnD_Resources"
+resources_dir = path.dirname(path.abspath(__file__))
+# resources_dir = this_dir + "/DnD_Resources"
 weapon_list_dir = f"{resources_dir}/weapon_list.csv"
 armor_list_dir = f"{resources_dir}/armor_list.csv"
 
