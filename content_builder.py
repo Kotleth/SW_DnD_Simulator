@@ -45,23 +45,8 @@ def build_weapon_list():
         for number, row in enumerate(csv_reader):
             if number == 0:
                 continue
-            print(row)
-            print(parse_weapon_from_csv(row))
-    # Weapon(name='long sword', number_of_dice=1, die_max_value=12, crit_chance=20, multiplier_crit=2, damage_type=DamageTypes.slashing, weapon_range='sword')
-    # Weapon(name='short sword', number_of_dice=1, die_max_value=8, crit_chance=19, multiplier_crit=2, damage_type=DamageTypes.slashing, weapon_range=1)
-    # Weapon(name='knuckle-duster', static_damage=1, number_of_dice=0, die_max_value=0, crit_chance=19, multiplier_crit=2, damage_type=DamageTypes.bludgeon, weapon_range='melee')
-    # Weapon(name='rocket gauntlet', static_damage=1, number_of_dice=1, die_max_value=4, crit_chance=19, multiplier_crit=2, damage_type=DamageTypes.bludgeon, weapon_range='melee')
-    # Weapon(name='vibroblade', number_of_dice=1, die_max_value=8, crit_chance=19, multiplier_crit=2, damage_type=DamageTypes.slashing, weapon_range='sword')
-    # Weapon(name='bastard sword', number_of_dice=1, die_max_value=10, crit_chance=20, multiplier_crit=2, damage_type=DamageTypes.slashing, weapon_range='sword')
-    # Weapon(name='vibrosword', number_of_dice=1, die_max_value=12, crit_chance=19, multiplier_crit=2, damage_type=DamageTypes.slashing, weapon_range='sword')
-    # Weapon(name='twohanded vibrosword', number_of_dice=2, die_max_value=6, crit_chance=19, multiplier_crit=2, damage_type=DamageTypes.slashing, weapon_range='sword')
-    # Weapon(name='vibroaxe', number_of_dice=2, die_max_value=8, crit_chance=20, multiplier_crit=2, damage_type=DamageTypes.slashing, weapon_range='sword')
-    # Weapon(name='light blaster', number_of_dice=1, die_max_value=8, crit_chance=19, multiplier_crit=2, damage_type=DamageTypes.energy, weapon_range='blaster')
-    # Weapon(name='blaster', number_of_dice=1, die_max_value=10, crit_chance=19, multiplier_crit=2, damage_type=DamageTypes.energy, weapon_range='blaster')
-    # Weapon(name='heavy blaster', number_of_dice=1, die_max_value=12, crit_chance=20, multiplier_crit=2, damage_type=DamageTypes.energy, weapon_range='blaster')
-    # Weapon(name='energy rifle', number_of_dice=2, die_max_value=6, crit_chance=19, multiplier_crit=2, damage_type=DamageTypes.energy, weapon_range='rifle')
-    # Weapon(name='heavy energy rifle', number_of_dice=2, die_max_value=8, crit_chance=20, multiplier_crit=2, damage_type=DamageTypes.energy, weapon_range='rifle')
-    # Weapon(name='energy crossbow', static_damage=2, number_of_dice=2, die_max_value=6, crit_chance=19, multiplier_crit=2, damage_type=DamageTypes.energy, weapon_range='crossbow')
+            parse_weapon_from_csv(row)
+
 
 def build_units_list():
     """ Creates a units list """

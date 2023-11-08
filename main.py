@@ -19,12 +19,5 @@ def build_basics():
 
 if __name__ == '__main__':
     build_basics()
-    # df = pd.read_csv(weapon_list_dir, sep=';')
-    aragorn = UnitList.get_unit('Aragorn')
-    legolas = UnitList.get_unit('Legolas')
     check_basics()
-    # generic_actions.perform_attack(legolas.attack(aragorn, weapon=WeaponList.weapon_dict['short sword']))
-    # aragorn.put_on_weapon(WeaponList.weapon_dict['blaster'])
-    # legolas.put_on_weapon(WeaponList.weapon_dict['blaster'])
-    print(WeaponList.weapon_dict.keys())
     open_app()

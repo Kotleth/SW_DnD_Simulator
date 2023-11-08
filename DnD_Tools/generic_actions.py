@@ -38,6 +38,8 @@ def start_battle(team_even, team_odd, max_rounds=100):
             if battle_finished:
                 break
         current_round += 1
+        team_even_hp = sum(unit.current_vitality_points for unit in team_even)
+        team_odd_hp = sum(unit.current_vitality_points for unit in team_odd)
     battle_report.append(f"THE BATTLE HAS ENDED<br>")
     for fallen in fallen_list:
         battle_report.append(f"{fallen.name} [{fallen.unit_id}] has fallen!")
