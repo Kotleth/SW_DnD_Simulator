@@ -1,5 +1,5 @@
 from math import ceil
-from weaponry import *
+from DnD_Tools.weaponry import *
 
 
 class Unit:

@@ -1,5 +1,5 @@
-from character import Unit
-from additions import ColorText
+from DnD_Tools.character import Unit
+from DnD_Tools.additions import ColorText
 
 
 def duel_series(duelist_1: Unit, duelist_2: Unit, duels_number=100, max_rounds=100, show_fight_description=False):
