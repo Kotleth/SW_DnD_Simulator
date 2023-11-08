@@ -38,7 +38,7 @@ class Weapon:
 
         if self.initializer:
             if name in WeaponList.weapon_dict.keys():
-                raise Exception(f"'{name.title()}'There is already a weapon with that name!")
+                raise DuplicateNameError(f"'{name.title()}'There is already a weapon with that name!")
         else:
             Weapon.initializer = True
         if add_to_list:
@@ -126,7 +126,10 @@ class Armor:
         else:
             self.traits = ["None"]
         if add_to_list:
-            ArmorList.armor_dict[self.name] = self
+            if name in ArmorList.armor_dict.keys():
+                raise DuplicateNameError(f"'{name.title()}'There is already a weapon with that name!")
+            else:
+                ArmorList.armor_dict[self.name] = self
 
     def prepare_to_csv(self):
         return [self.name, self.armor_class, self.dex_bonus_limit, self.armor_type, self.strength_required, self.traits, self.cost]

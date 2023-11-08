@@ -11,7 +11,6 @@ this_dir = path.dirname(path.abspath(__file__))
 resources_dir = this_dir + "/DnD_Resources"
 weapon_list_dir = f"{resources_dir}/weapon_list.csv"
 armor_list_dir = f"{resources_dir}/armor_list.csv"
-print(weapon_list_dir)
 
 weapon_list_header = ['Name', 'Damage', 'Damage_type', 'Traits', 'Crit_multiplier', 'Crit_range', 'Range', 'Weapon_type', 'Price']
 armor_list_header = ['Name', 'Armor_Class', 'Dex_Bonus_Limit', 'Armor_Type', 'Strength_Required', 'Traits', 'Cost']
@@ -117,3 +116,8 @@ if __name__ == '__main__':
         for weapon in WeaponList.weapon_dict.values():
             csv_writer.writerow(weapon.prepare_to_csv())
 
+
+def build_basics():
+    build_weapon_list()
+    build_classes_list()
+    build_units_list()

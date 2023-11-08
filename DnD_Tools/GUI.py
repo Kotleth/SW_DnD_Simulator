@@ -2,7 +2,7 @@ import copy
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLineEdit, \
     QPushButton, QDialog, QLabel, QComboBox, QCompleter, QTextBrowser, QHBoxLayout
-from PySide6.QtCore import Signal, Slot, Qt
+from PySide6.QtCore import Signal, Qt
 
 from additions import CharacterClassList
 from character import UnitList, Unit

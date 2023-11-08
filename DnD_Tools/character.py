@@ -47,10 +47,9 @@ class Unit:
 
         if add_to_list:
             if name in UnitList.units_dict.keys():
-                raise Exception(f"'{name.title()}'There is already a unit with that name!")
+                raise DuplicateNameError(f"'{name.title()}'There is already a unit with that name!")
             else:
                 UnitList.update_dict(self)
-                print(UnitList.units_dict.keys())
 
     def __copy__(self):
         new_instance = Unit(name=self.name, strength=self.strength.value, dexterity=self.dexterity.value,

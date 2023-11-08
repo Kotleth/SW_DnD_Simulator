@@ -75,6 +75,7 @@ def make_attack_action(attacking_unit, attack_order, battle_report, fallen_list,
 
 
 def start_duel(duelist_1: Unit, duelist_2: Unit, max_rounds: int, show_fight_description=False):
+    # TODO to be removed. It's bugged anyway, because a dead unit can still attack if it moves last.
     current_round = 0
     attack_order: [Unit] = sorted([duelist_1, duelist_2], key=lambda x: x.get_initiative_roll())
     while (max_rounds >= current_round and
