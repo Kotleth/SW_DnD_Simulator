@@ -25,20 +25,19 @@ def build_classes_list():
 
 
 def build_armor_list():
-    """ Creates a weapons list """
-    with open(armor_list_dir, mode='r') as file:
-        csv_reader = reader(file, delimiter=';')
+    """ Creates an armors list """
+    with open(armor_list_dir, mode='r') as _file:
+        csv_reader = reader(_file, delimiter=';')
         for number, row in enumerate(csv_reader):
             if number == 0:
                 continue
-            print(row)
-            print(parse_weapon_from_csv(row))
+            parse_armor_from_csv(row)
 
 
 def build_weapon_list():
     """ Creates a weapons list """
-    with open(weapon_list_dir, mode='r') as file:
-        csv_reader = reader(file, delimiter=';')
+    with open(weapon_list_dir, mode='r') as _file:
+        csv_reader = reader(_file, delimiter=';')
         for number, row in enumerate(csv_reader):
             if number == 0:
                 continue
@@ -55,6 +54,11 @@ def build_units_list():
          constitution=12, intelligence=14,
          wisdom=16, charisma=12,
          level=12, character_class=CharacterClassList.undefined_class)
+
+
+def parse_armor_from_csv(csv_row):
+    return Armor(name=csv_row[0], armor_class=int(csv_row[1]), dex_bonus_limit=int(csv_row[2]), armor_type=csv_row[3],
+                 strength_required=int(csv_row[4]), traits=list(csv_row[5]), cost=int(csv_row[6]))
 
 
 def parse_weapon_from_csv(csv_row):
@@ -119,3 +123,4 @@ def build_basics():
     build_weapon_list()
     build_classes_list()
     build_units_list()
+    build_armor_list()

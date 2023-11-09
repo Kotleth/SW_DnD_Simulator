@@ -128,6 +128,10 @@ class Unit:
         return damage_dealt
 
     def attack(self, target, weapon: Weapon = None, to_hit_misc_bonus=0):
+        """
+        Function returns:
+        attack_roll, damage_dealt, damage_dice_result_list + crit_damage_dice_result_list, participants, crit_occurrence
+        """
         crit_occurrence = False
         crit_damage_dice_result_list = []
         damage_dealt = 0
