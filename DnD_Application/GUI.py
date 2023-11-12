@@ -7,7 +7,7 @@ from PySide6.QtCore import Signal, Qt
 from DnD_Tools.additions import CharacterClassList
 from DnD_Tools.character import UnitList, Unit
 from DnD_Tools.generic_actions import start_battle
-from content_builder import WeaponList
+from DnD_Resources.content_builder import WeaponList
 
 # units_by_id_dict: [int, Unit] = {}
 team_even_dict: [int, Unit] = {}
