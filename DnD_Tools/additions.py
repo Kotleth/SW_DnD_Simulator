@@ -2,6 +2,7 @@ from math import floor
 from os import path
 import random as r
 
+
 this_dir = path.dirname(path.abspath(__file__))
 
 weapons_ranges_associations_dict = {
@@ -200,3 +201,22 @@ class ArmorType:
     medium = 'medium'
     heavy = 'heavy'
     power = 'power'
+
+
+class Position:
+    x_coord: int
+    y_coord: int
+
+    def __init__(self, x, y):
+        self.x_coord = x
+        self.y_coord = y
+
+    def distance(self, other_position):
+        return ((self.x_coord - other_position.x_coord)**2 + (self.y_coord - other_position.y_coord)**2)**0.5
+
+    def set(self, x, y):
+        self.x_coord = x
+        self.y_coord = y
+
+    def get(self):
+        return self.x_coord, self.y_coord

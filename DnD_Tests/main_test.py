@@ -4,7 +4,10 @@ from DnD_Resources.content_builder import *
 
 
 class TestMain(unittest.TestCase):
-    """For now, it's only a one test, but it's simple enough to not split it."""
+    """
+    For now, it's only a one test, but it's simple enough to not split it.
+    No need for setup and teardown yet, but maybe in the future there will be a test of csv files.
+    """
     def test_building_resources(self):
         build_basics()
         print("Testing lists building...")

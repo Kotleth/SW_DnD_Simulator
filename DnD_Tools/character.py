@@ -208,3 +208,22 @@ class UnitList:
         for unit in cls.units_dict.values():
             unit.show_status()
         print(f"{'*' * 10}")
+
+
+class UnitForMap(Unit):
+    """This class is mostly for a damage control. If I screw up something, there will be still a working Unit class."""
+    position: Position
+    speed: int
+    
+    def __init__(self, unit: Unit, x_position=0, y_position=0, speed=60):
+        super().__init__(unit.name, unit.strength.value, unit.dexterity.value, unit.constitution.value,
+                         unit.intelligence.value, unit.wisdom.value, unit.charisma.value, unit.level,
+                         unit.character_class, unit.vitality_points, add_to_list=False)
+        self.weapon = unit.weapon
+        self.armor = unit.armor
+        self.resistances = unit.resistances
+        self.feats_list = unit.feats_list
+        self.position = Position(x_position, y_position)
+        self.speed = speed
+
+    
