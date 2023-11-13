@@ -18,6 +18,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Set up Rust
+      uses: actions/setup-rust@v1
+      with:
+        profile: minimal
+        default-version: "1.55.0"  # Update to the version you need
+    - name: Build Rust libraries
+      run: |
+        cd rust_lib
+        cargo build --release
+        cd ..
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
