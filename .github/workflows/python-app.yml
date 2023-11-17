@@ -31,6 +31,7 @@ jobs:
         cd rust_lib/dnd_lib
         cargo build --verbose
         cargo test --verbose
+        cargo build --release
         cd ../..
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
