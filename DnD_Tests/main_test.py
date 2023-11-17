@@ -1,6 +1,7 @@
 import copy
 import unittest
 from DnD_Resources.content_builder import *
+from rust_lib.dnd_lib.rust_headers import dijkstra_distances
 
 
 class TestMain(unittest.TestCase):
@@ -50,6 +51,14 @@ class TestMain(unittest.TestCase):
         self.assertIs(crit, attack_roll == 20, msg="Critical hit didn't work properly!")
         self.assertEqual((hero_unit.name, villain_unit.name), participants, msg="Wrong participants has been returned from attack!")
         print("Testing an attack method for a unit: DONE")
+        print("Testing functions from rust library...")
+        matrix = [[50, 100, 50, 50], [50, 50, 50, 50]]
+        start = (0, 0)
+        expected_dict = {
+            (0, 0): 0, (0, 2): 100, (1, 2): 150, (1, 1): 100, (0, 3): 150, (1, 3): 200, (0, 1): 50, (1, 0): 100
+        }
+        self.assertTrue(dijkstra_distances(matrix, start) == expected_dict, msg="Dijkstra algorithm is not working properly!")
+        print("Testing functions from rust library: DONE")
 
 
 if __name__ == '__main__':
