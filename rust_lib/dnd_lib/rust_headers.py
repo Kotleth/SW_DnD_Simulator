@@ -32,5 +32,5 @@ def dijkstra_distances(mat_a, starting_point):
 matrix = [[50, 100, 50, 50], [50, 50, 50, 50]]
 # matrix = [[50.0, 100.0, 50.0, 50.0], [50.0, 50.0, 50.0, 50.0]]
 start = (0, 0)
-print(testing_func(matrix, start))
+print(dijkstra_distances(matrix, start))
 

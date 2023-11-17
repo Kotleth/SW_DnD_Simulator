@@ -23,7 +23,6 @@ impl PartialOrd for Node {
 // pub fn dijkstra(in_matrix: &[f32], rows: usize, x_start: usize, y_start: usize) -> (*const f32, usize)
 pub fn dijkstra(in_matrix: &[f32], rows: usize, x_start: usize, y_start: usize) -> (*const i32, usize)
 {
-    // let init_matrix = in_matrix.iter().map(|&x| x as u32).collect();
     let init_matrix: Vec<u32> = in_matrix.clone().iter().map(|&x| x as u32).collect();
     let start: (usize, usize) = (x_start, y_start);
     let mut init_graph: HashMap<(usize, usize), HashMap<(usize, usize), u32>> = HashMap::new();
