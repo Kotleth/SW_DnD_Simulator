@@ -1,11 +1,32 @@
 import ctypes
 import numpy as np
 from os import path
+import platform
 
 
 lib_dir = path.dirname(path.abspath(__file__))
-# my_lib = ctypes.CDLL(f'{new_path}/target/release/libtesting.dylib')
-my_lib = ctypes.CDLL(f'{lib_dir}/target/release/libdnd_lib.dylib')
+
+# Check the operating system
+if platform.system() == "Linux":
+    # Install Linux-specific dependencies or perform actions
+    # Example: Install a Linux package using a package manager
+    file_type = '.so'
+
+elif platform.system() == "Windows":
+    # Install Windows-specific dependencies or perform actions
+    # Example: Install a Python package using pip
+    file_type = '.dll'
+
+elif platform.system() == "Darwin":
+    # Install Windows-specific dependencies or perform actions
+    # Example: Install a Python package using pip
+    file_type = '.dylib'
+
+else:
+    # Handle other operating systems or show a warning
+    raise Exception("Unsupported operating system")
+
+my_lib = ctypes.CDLL(f'{lib_dir}/target/release/libdnd_lib' + file_type)
 
 
 '''
