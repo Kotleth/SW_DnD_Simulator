@@ -1,9 +1,11 @@
 import ctypes
-from os import getcwd
 import numpy as np
-new_path = getcwd()
+from os import path
+
+
+lib_dir = path.dirname(path.abspath(__file__))
 # my_lib = ctypes.CDLL(f'{new_path}/target/release/libtesting.dylib')
-my_lib = ctypes.CDLL(f'{new_path}/target/release/libdnd_lib.dylib')
+my_lib = ctypes.CDLL(f'{lib_dir}/target/release/libdnd_lib.dylib')
 
 
 '''
