@@ -1,5 +1,4 @@
 use std::collections::{BinaryHeap, HashMap, HashSet};
-// use std::cmp::{Ordering, Ord, PartialOrd};
 use std::cmp::Ordering;
 
 #[derive(Eq, PartialEq)]
@@ -19,8 +18,8 @@ impl PartialOrd for Node {
         Some(self.cmp(other))
     }
 }
+
 #[no_mangle]
-// pub fn dijkstra(in_matrix: &[f32], rows: usize, x_start: usize, y_start: usize) -> (*const f32, usize)
 pub fn dijkstra(in_matrix: &[f32], rows: usize, x_start: usize, y_start: usize) -> (*const i32, usize)
 {
     let init_matrix: Vec<u32> = in_matrix.clone().iter().map(|&x| x as u32).collect();
