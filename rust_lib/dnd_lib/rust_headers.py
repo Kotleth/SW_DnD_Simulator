@@ -30,9 +30,3 @@ def dijkstra_distances(mat_a, starting_point):
         distances_dict[(distances_array[i*2], distances_array[i*2 + 1])] = distances_array[i + int(len(distances_array) * 2 / 3)]
     return distances_dict
 
-
-matrix = [[50, 100, 50, 50], [50, 50, 50, 50]]
-# matrix = [[50.0, 100.0, 50.0, 50.0], [50.0, 50.0, 50.0, 50.0]]
-start = (0, 0)
-print(dijkstra_distances(matrix, start))
-
