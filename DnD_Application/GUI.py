@@ -1,7 +1,8 @@
 import copy
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLineEdit, \
-    QPushButton, QDialog, QLabel, QComboBox, QCompleter, QTextBrowser, QHBoxLayout
+    QPushButton, QDialog, QLabel, QComboBox, QCompleter, QTextBrowser, QHBoxLayout, QTableWidget, QTableWidgetItem, \
+    QHeaderView, QStyledItemDelegate
 from PySide6.QtCore import Signal, Qt
 
 from DnD_Tools.additions import CharacterClassList
@@ -9,7 +10,6 @@ from DnD_Tools.character import UnitList, Unit
 from DnD_Tools.generic_actions import start_battle
 from DnD_Resources.content_builder import WeaponList
 
-# units_by_id_dict: [int, Unit] = {}
 team_even_dict: [int, Unit] = {}
 team_odd_dict: [int, Unit] = {}
 team_1_list = []
@@ -160,6 +160,8 @@ class BattleWindow(QDialog):
         global occupied_team_even_id
         new_unit = copy.copy(UnitList.units_dict[self.team_combo.currentText()])
         _weapon = self.weapon_list_combo.currentText()
+        print(new_unit)
+        print(type(new_unit))
         if not _weapon == "Default":
             new_unit.put_on_weapon(WeaponList.weapon_dict[_weapon.lower()])
         self.team_even.append(new_unit)
@@ -242,12 +244,66 @@ class CharacterWindow(QDialog):
         else:
             window.action_browser.append(f"No such class as {self.text_inputs[1].text().lower().title()}")
 
+
+class MatrixDialog(QDialog):
+    def __init__(self, matrix, parent=None):
+        super(MatrixDialog, self).__init__(parent)
+        height = len(matrix) * 40 + 100
+        width = len(matrix[0]) * 40 + 80
+        self.setGeometry(500, 100, width, height)
+
+        self.matrix = matrix
+
+        self.init_matrix_dialog()
+
+    def init_matrix_dialog(self):
+        layout = QVBoxLayout()
+
+        # Create a QTableWidget to display the matrix
+        self.matrix_widget = QTableWidget(self)
+
+        # Set a delegate to handle custom rendering
+        delegate = CellDelegate(self)
+        self.matrix_widget.setItemDelegate(delegate)
+
+        self.populate_table()
+
+        # OK button to close the dialog
+        ok_button = QPushButton('OK', self)
+        ok_button.clicked.connect(self.accept)
+
+        layout.addWidget(self.matrix_widget)
+        layout.addWidget(ok_button)
+
+        self.setLayout(layout)
+
+    def populate_table(self):
+        rows = len(self.matrix)
+        cols = len(self.matrix[0])
+
+        self.matrix_widget.setRowCount(rows)
+        self.matrix_widget.setColumnCount(cols)
+
+        for i in range(rows):
+            self.matrix_widget.setRowHeight(i, 50)
+            for j in range(cols):
+                self.matrix_widget.setColumnWidth(j, 50)
+                item = QTableWidgetItem(str(self.matrix[i][j]))
+                item.setTextAlignment(Qt.AlignCenter)
+                self.matrix_widget.setItem(i, j, item)
+
+class CellDelegate(QStyledItemDelegate):
+    def paint(self, painter, option, index):
+        option.rect.adjust(1, 1, -1, -1)  # Adjust the cell rect to leave space for the frame
+        super(CellDelegate, self).paint(painter, option, index)
+
 class MyMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.data_received = []
         self.char_creation_window = None
         self.battle_window = None
+        self.matrix_window = None
 
         self.setWindowTitle("D&D Simulator")
         self.setGeometry(100, 100, 400, 400)
@@ -262,10 +318,15 @@ class MyMainWindow(QMainWindow):
         self.character_creation_window_button.clicked.connect(self.open_character_creation)
         layout.addWidget(self.character_creation_window_button)
 
-        # Create a button to open the side window
+        # Create a button to open the settings window
         self.settings_window_button = QPushButton("Settings", self)
         self.settings_window_button.clicked.connect(self.settings)
         layout.addWidget(self.settings_window_button)
+
+        # Create a button to open the map window
+        self.map_window_button = QPushButton("Map", self)
+        self.map_window_button.clicked.connect(self.define_map)
+        layout.addWidget(self.map_window_button)
 
         # A text browser that shows every move of a user
         # TODO is it necessary?
@@ -290,6 +351,12 @@ class MyMainWindow(QMainWindow):
         # TODO placeholder
         self.action_browser.append("Not implemented yet!")
 
+    def define_map(self):
+        # TODO placeholder
+        self.action_browser.append("Map matrix opened...")
+        self.matrix_window = MatrixDialog()
+        self.matrix_window.show()
+
     def log_action(self):
         self.action_browser.append("It's time to D-D-D-D-D-D-D-D-D-Duel!!!")
         self.battle_window = BattleWindow()
@@ -297,7 +364,17 @@ class MyMainWindow(QMainWindow):
 
     def receive_character(self, character_description):
         self.data_received = character_description
-        UnitList.units_dict[self.data_received[0]] = self.data_received
+        UnitList.units_dict[self.data_received[0]] = Unit(
+              name=self.data_received[0],
+              character_class=CharacterClassList.character_classes_dict[self.data_received[1]],
+              level=int(self.data_received[2]),
+              strength=int(self.data_received[3]),
+              dexterity=int(self.data_received[4]),
+              constitution=int(self.data_received[5]),
+              intelligence=int(self.data_received[6]),
+              wisdom=int(self.data_received[7]),
+              charisma=int(self.data_received[8]),
+              )
         if self.battle_window:
             self.battle_window.team_combo.clear()
             self.battle_window.team_combo.addItems(list(UnitList.units_dict.keys()))
@@ -305,9 +382,10 @@ class MyMainWindow(QMainWindow):
 
 
 def open_app():
-    # TODO temporary solution.
+    # # TODO temporary solution.
     global window
     app = QApplication(sys.argv)
     window = MyMainWindow()
     window.show()
     sys.exit(app.exec_())
+
